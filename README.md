@@ -1,4 +1,4 @@
-# GelismisArsa
+# Arsa
 
 Koordinat tabanlı, kiralamalı ve **izin bazında detaylı** arsa koruma eklentisi.
 Taban sürüm **Minecraft 1.20.1**, üst sürümlerde (1.20.x, 1.21.x) de çalışır. Spigot ve Paper uyumludur.
@@ -14,13 +14,14 @@ Taban sürüm **Minecraft 1.20.1**, üst sürümlerde (1.20.x, 1.21.x) de çalı
 
 ## Kurulum
 
-1. [Releases](../../releases) sayfasından `GelismisArsa-x.y.z.jar` dosyasını indirip `plugins/` klasörüne at.
+1. [Releases](../../releases) sayfasından `Arsa-x.y.z.jar` dosyasını indirip `plugins/` klasörüne at.
 2. İsteğe bağlı: **Vault** + bir ekonomi eklentisi (kiralama için), **WorldEdit** veya **FastAsyncWorldEdit** (seçimden oluşturma ve sıfırlama için).
-3. Sunucuyu başlat. Eski sürüm verisi (`config.yml` içindeki `arsalar` + `kiralama.yml`) otomatik olarak `arsalar.yml` dosyasına taşınır, eski dosyalar `config-eski.yml` / `kiralama-eski.yml` olarak yedeklenir.
+3. **GelismisArsa'dan yükseltiyorsan:** eski `GelismisArsa-*.jar` dosyasını sil. `plugins/GelismisArsa` içindeki veriler ilk açılışta otomatik olarak `plugins/Arsa` klasörüne kopyalanır. Yetki eklentindeki `gelismisarsa.*` düğümlerini `arsa.*` olarak değiştir.
+4. Sunucuyu başlat. Eski sürüm verisi (`config.yml` içindeki `arsalar` + `kiralama.yml`) otomatik olarak `arsalar.yml` dosyasına taşınır, eski dosyalar `config-eski.yml` / `kiralama-eski.yml` olarak yedeklenir.
 
 ## Dil / Language
 
-`/arsa ...` yazan oyuncu Türkçe, `/plot ...` yazan oyuncu İngilizce görür. Tüm metinler `plugins/GelismisArsa/lang/tr.yml` ve `lang/en.yml` içinde düzenlenebilir (`/arsa yenile`). Hiç komut kullanmamış oyuncular için `config.yml → varsayilan-dil` geçerlidir (`otomatik` = oyun istemcisinin dili).
+`/arsa ...` yazan oyuncu Türkçe, `/plot ...` yazan oyuncu İngilizce görür. Tüm metinler `plugins/Arsa/lang/tr.yml` ve `lang/en.yml` içinde düzenlenebilir (`/arsa yenile`). Hiç komut kullanmamış oyuncular için `config.yml → varsayilan-dil` geçerlidir (`otomatik` = oyun istemcisinin dili).
 
 | Türkçe (`/arsa`) | English (`/plot`) |
 |---|---|
@@ -106,16 +107,16 @@ Rütbe varsayılanları `config.yml → rutbe-izinleri` ile değiştirilebilir.
 
 | Düğüm | Varsayılan |
 |---|---|
-| `gelismisarsa.kiralama.kirala` / `.terket` / `.sure` | herkes |
-| `gelismisarsa.gui` | herkes |
-| `gelismisarsa.admin` (tümü) | op |
-| `gelismisarsa.admin.olustur` / `.sil` / `.liste` / `.sablon` / `.yenile` | op |
-| `gelismisarsa.admin.bypass` | op (yine de `/arsa bypass` ile açılmalı) |
-| `gelismisarsa.admin.yonet` | op — her arsanın panelini sahibi gibi kullanma |
+| `arsa.kiralama.kirala` / `.terket` / `.sure` | herkes |
+| `arsa.gui` | herkes |
+| `arsa.admin` (tümü) | op |
+| `arsa.admin.olustur` / `.sil` / `.liste` / `.sablon` / `.yenile` | op |
+| `arsa.admin.bypass` | op (yine de `/arsa bypass` ile açılmalı) |
+| `arsa.admin.yonet` | op — her arsanın panelini sahibi gibi kullanma |
 
 ## Derleme
 
 ```bash
 mvn clean package
 ```
-Çıktı: `target/GelismisArsa-<sürüm>.jar`. Java 17 gerekir. `v*` etiketi gönderildiğinde GitHub Actions jar'ı derleyip sürüm olarak yayınlar.
+Çıktı: `target/Arsa-<sürüm>.jar`. Java 17 gerekir. `v*` etiketi gönderildiğinde GitHub Actions jar'ı derleyip sürüm olarak yayınlar.

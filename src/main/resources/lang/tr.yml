@@ -1,4 +1,4 @@
-# GelismisArsa - Türkçe dil dosyası (/arsa)
+# Arsa - Türkçe dil dosyası (/arsa)
 # & renk kodları ve {0}, {1}... yer tutucuları kullanılır.
 # Eksik anahtarlar jar içindeki varsayılandan alınır. Değişiklikten sonra: /arsa yenile
 
@@ -233,7 +233,7 @@ komut:
     basari: 'config.yml ve dil dosyaları yeniden yüklendi.'
 yardim:
   oyuncu:
-    - '&8&m          &r &6&lGelismisArsa &8&m          '
+    - '&8&m          &r &6&lArsa &8&m          '
     - '&e/arsa kirala <süre> &8» &7Bulunduğun sahipsiz arsayı kirala'
     - '&e/arsa terket &8» &7Arsanı bırak, kalan süre iade edilir'
     - '&e/arsa sure <arttır|azalt> <süre> &8» &7Kira süresini yönet'

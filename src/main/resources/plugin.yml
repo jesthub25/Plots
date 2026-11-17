@@ -1,6 +1,6 @@
-name: GelismisArsa
+name: Arsa
 version: '${project.version}'
-main: org.jestron.gelismisArsa.GelismisArsa
+main: org.jestron.arsa.ArsaPlugin
 api-version: '1.20'
 author: Jestron
 website: https://github.com/jesthub25/Plots
@@ -9,68 +9,68 @@ softdepend: [Vault, WorldEdit, FastAsyncWorldEdit]
 
 commands:
   arsa:
-    description: GelismisArsa ana komutu (Turkce). Tum islemler bu komut uzerinden yapilir.
+    description: Arsa ana komutu (Turkce). Tum islemler bu komut uzerinden yapilir.
     usage: /arsa <kirala|terket|sure|bilgi|sahip|gui|yetkiver|yetkial|ziyaretci|izinler|yardim>
   plot:
-    description: GelismisArsa main command (English). All actions run through this command.
+    description: Arsa main command (English). All actions run through this command.
     usage: /plot <rent|leave|time|info|owner|gui|trust|untrust|visitor|perms|help>
 
 permissions:
-  gelismisarsa.oyuncu:
+  arsa.oyuncu:
     description: Tum oyuncu komutlari.
     default: true
     children:
-      gelismisarsa.kiralama.kirala: true
-      gelismisarsa.kiralama.terket: true
-      gelismisarsa.kiralama.sure: true
-      gelismisarsa.gui: true
-  gelismisarsa.kiralama.kirala:
+      arsa.kiralama.kirala: true
+      arsa.kiralama.terket: true
+      arsa.kiralama.sure: true
+      arsa.gui: true
+  arsa.kiralama.kirala:
     description: /arsa kirala
     default: true
-  gelismisarsa.kiralama.terket:
+  arsa.kiralama.terket:
     description: /arsa terket
     default: true
-  gelismisarsa.kiralama.sure:
+  arsa.kiralama.sure:
     description: /arsa sure
     default: true
-  gelismisarsa.gui:
+  arsa.gui:
     description: /arsa gui (yine de sadece arsa sahibi ve MOD acabilir)
     default: true
 
-  gelismisarsa.admin:
+  arsa.admin:
     description: Tum admin yetkileri.
     default: op
     children:
-      gelismisarsa.admin.olustur: true
-      gelismisarsa.admin.sil: true
-      gelismisarsa.admin.liste: true
-      gelismisarsa.admin.bypass: true
-      gelismisarsa.admin.sablon: true
-      gelismisarsa.admin.yenile: true
-      gelismisarsa.admin.yonet: true
-  gelismisarsa.admin.*:
-    description: gelismisarsa.admin ile ayni.
+      arsa.admin.olustur: true
+      arsa.admin.sil: true
+      arsa.admin.liste: true
+      arsa.admin.bypass: true
+      arsa.admin.sablon: true
+      arsa.admin.yenile: true
+      arsa.admin.yonet: true
+  arsa.admin.*:
+    description: arsa.admin ile ayni.
     default: op
     children:
-      gelismisarsa.admin: true
-  gelismisarsa.admin.olustur:
+      arsa.admin: true
+  arsa.admin.olustur:
     description: /arsa olustur
     default: op
-  gelismisarsa.admin.sil:
+  arsa.admin.sil:
     description: /arsa sil
     default: op
-  gelismisarsa.admin.liste:
+  arsa.admin.liste:
     description: /arsa liste
     default: op
-  gelismisarsa.admin.bypass:
+  arsa.admin.bypass:
     description: /arsa bypass ile koruma atlatmayi acabilme (sadece acikken gecerli).
     default: op
-  gelismisarsa.admin.sablon:
+  arsa.admin.sablon:
     description: /arsa sablon
     default: op
-  gelismisarsa.admin.yenile:
+  arsa.admin.yenile:
     description: /arsa yenile
     default: op
-  gelismisarsa.admin.yonet:
+  arsa.admin.yonet:
     description: Her arsanin yonetim panelini sahibi gibi kullanabilme.
     default: op

@@ -1,4 +1,4 @@
-# GelismisArsa - English language file (/plot)
+# Arsa - English language file (/plot)
 # Uses & color codes and {0}, {1}... placeholders.
 # Missing keys fall back to the defaults inside the jar. After editing: /plot reload
 
@@ -233,7 +233,7 @@ komut:
     basari: 'config.yml and language files reloaded.'
 yardim:
   oyuncu:
-    - '&8&m          &r &6&lGelismisArsa &8&m          '
+    - '&8&m          &r &6&lArsa &8&m          '
     - '&e/plot rent <time> &8» &7Rent the unclaimed plot you are in'
     - '&e/plot leave &8» &7Leave your plot, remaining time is refunded'
     - '&e/plot time <add|remove> <time> &8» &7Manage rent time'

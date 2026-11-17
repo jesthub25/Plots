@@ -1,12 +1,17 @@
-## GelismisArsa 3.1.0
+## Arsa 3.2.0
 
-### Yeni / New
-- **İki dil / Two languages:** `/arsa` → Türkçe, `/plot` → English. Oyuncunun son kullandığı komut; tüm GUI'leri, mesajları, koruma uyarılarını ve bildirimleri o dilde gösterir ve tercih kaydedilir. Tüm metinler `lang/tr.yml` ve `lang/en.yml` içinde düzenlenebilir.
-- **Tek arsa kuralı / One-plot rule:** Bir oyuncunun adı bir arsada geçiyorsa (sahip veya üye), başka bir arsaya üye olamaz, yetki alamaz ve başka arsa kiralayamaz (`tek-arsa-kurali`).
-- **Admin arsa listesi / Admin plot list:** `/arsa liste` artık 54 slotluk, sayfalı bir GUI. Filtre (tümü / sahipli / sahipsiz), özet, her arsa için sahip, tüm üyeler, rütbeleri ve izinlerinin tek tek gösterildiği detay ekranı, ışınlanma ve yönetim paneline geçiş.
-
-### Düzeltme / Fixes
-- Süresi geçmiş sohbet istemi artık oyuncunun normal sohbet mesajını yutmaz.
+### Değişiklik / Change
+- Eklentinin adı **GelismisArsa → Arsa** oldu. Jar: `Arsa-3.2.0.jar`, veri klasörü: `plugins/Arsa`.
+  The plugin is now named **Arsa**. Jar: `Arsa-3.2.0.jar`, data folder: `plugins/Arsa`.
+- Yetki düğümleri `gelismisarsa.*` → **`arsa.*`** (ör. `arsa.admin`, `arsa.admin.liste`, `arsa.kiralama.kirala`).
+  Permission nodes renamed `gelismisarsa.*` → **`arsa.*`**.
+- Komutlar aynı: `/arsa` (Türkçe), `/plot` (English).
 
 ### Yükseltme / Upgrade
-Jar'ı değiştirmen yeterli. `config.yml` içindeki yeni ayarlar (`varsayilan-dil`, `tek-arsa-kurali`) yoksa varsayılanlar kullanılır. Dil dosyaları ilk açılışta oluşturulur.
+1. Eski `GelismisArsa-*.jar` dosyasını sil, `Arsa-3.2.0.jar` dosyasını koy. / Remove the old jar, add the new one.
+2. İlk açılışta `plugins/GelismisArsa` içindeki tüm veriler (arsalar, kira, dil tercihleri, şablonlar, ayarlar) otomatik olarak `plugins/Arsa` klasörüne kopyalanır. Eski klasör yedek olarak kalır.
+   On first start all data is copied automatically from `plugins/GelismisArsa` to `plugins/Arsa`.
+3. LuckPerms vb. yetki eklentisindeki `gelismisarsa.` düğümlerini `arsa.` ile değiştir. / Update `gelismisarsa.` nodes to `arsa.` in your permissions plugin.
+
+### 3.1.0 ile gelenler / Included from 3.1.0
+- İki dil (`/arsa` TR, `/plot` EN), tek arsa kuralı, 54 slotluk admin arsa listesi ve detay GUI'si.

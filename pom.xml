@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jestron</groupId>
-    <artifactId>GelismisArsa</artifactId>
-    <version>3.1.0</version>
+    <artifactId>Arsa</artifactId>
+    <version>3.2.0</version>
     <packaging>jar</packaging>
 
-    <name>GelismisArsa</name>
+    <name>Arsa</name>
     <description>Koordinat tabanli, kiralamali, detayli izin sistemli arsa eklentisi (1.20.1+)</description>
 
     <properties>
@@ -83,7 +83,7 @@
     </dependencies>
 
     <build>
-        <finalName>GelismisArsa-${project.version}</finalName>
+        <finalName>Arsa-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

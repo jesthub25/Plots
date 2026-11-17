@@ -29,12 +29,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: GelismisArsa
-          path: target/GelismisArsa-*.jar
+          name: Arsa
+          path: target/Arsa-*.jar
 
       - name: Surum yayinla
         if: success() && github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: target/GelismisArsa-*.jar
+          files: target/Arsa-*.jar
           fail_on_unmatched_files: true
