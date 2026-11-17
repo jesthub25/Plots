@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +32,12 @@ public final class MenuListener implements Listener {
 
     private static final long TIK_ARALIGI_MS = 120L;
     private static final Set<UUID> ACIK = new HashSet<>();
+    private final Plugin plugin;
     private final Map<UUID, Long> sonTik = new HashMap<>();
+
+    public MenuListener(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     static void acildi(Player p) {
         ACIK.add(p.getUniqueId());
@@ -55,7 +61,11 @@ public final class MenuListener implements Listener {
         if (son != null && simdi - son < TIK_ARALIGI_MS) return;
         sonTik.put(p.getUniqueId(), simdi);
 
-        menu.tiklandi(slot, tip);
+        // Envanter açma/kapama tıklama olayının içinde değil, bir sonraki tick'te yapılır
+        // (Spigot'un önerdiği güvenli yol; hayalet eşya / senkron sorunlarını önler).
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (p.isOnline()) menu.tiklandi(slot, tip);
+        });
     }
 
     /** Başka bir eklenti iptali kaldırsa bile menüden eşya alınamaz. */

@@ -65,7 +65,7 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
 
         pm.registerEvents(new KorumaListener(arsalar, yetki), this);
         pm.registerEvents(new CevreListener(arsalar, yetki, () -> ayarlar), this);
-        pm.registerEvents(new MenuListener(), this);
+        pm.registerEvents(new MenuListener(this), this);
         pm.registerEvents(sohbet, this);
         pm.registerEvents(kira, this);
         pm.registerEvents(this, this);
