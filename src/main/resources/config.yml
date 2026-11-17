@@ -1,0 +1,52 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║                  GelismisArsa - Ayarlar                       ║
+# ║   Arsa verileri bu dosyada DEĞİL, arsalar.yml içinde tutulur. ║
+# ║   Değişikliklerden sonra: /arsa yenile                        ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+# Tüm mesajların başındaki önek (& renk kodları kullanılabilir)
+on-ek: '&6&lArsa &8» &7'
+
+# Aynı "yetkin yok" mesajının aynı oyuncuya tekrar gönderilmesi için bekleme (ms)
+mesaj-bekleme-ms: 1500
+
+kiralama:
+  aktif: true
+  # Bir haftalık kira ücreti. Gün/saat bazlı ücretler buna göre orantılı hesaplanır.
+  haftalik-ucret: 10000.0
+  # Kiralama ve toplam kalan süre en fazla kaç hafta olabilir
+  max-hafta: 4
+  # Bir oyuncunun aynı anda sahip olabileceği arsa sayısı (0 = sınırsız)
+  oyuncu-basi-max-arsa: 1
+  # Kira bitince / terk edilince arsa sıfırlansın mı? (WorldEdit gerekir)
+  # Sıfırlama, arsanın oluşturulduğu (veya ilk kiralandığı) andaki şablona geri döndürür.
+  bitince-sifirla: true
+  # Arsanın şablonu yoksa (eski sürümden kalan arsalar) tüm alan havaya çevrilsin mi?
+  # false yaparsan şablonsuz arsalar sıfırlanmaz. Şablon almak için: /arsa sablon
+  sablon-yoksa-havaya-cevir: true
+  # Girişte, kirası bu kadar saatten az kalan arsalar için uyarı göster (0 = kapalı)
+  hatirlatma-saat: 24
+
+# Oyuncu dışı tehlikelere karşı arsa korumaları
+koruma:
+  patlama: true       # TNT, creeper, rüzgar yükü vb. arsa bloklarına zarar veremez
+  ates: true          # ateş yayılması / yanma / lav tutuşturması
+  sivi: true          # arsa dışından içeri akan su/lav
+  piston: true        # arsa sınırını geçen piston hareketleri
+  dagitici: true      # dışarıdaki dağıtıcıların arsaya sıvı/ateş atması
+  huni: true          # arsadaki depolardan dışarıya huni ile eşya çekme
+  mob-tahribat: true  # enderman, wither, ravager, zombi kapı kırma vb.
+  buyume: true        # dışarıdaki ağaçların arsaya doğru büyümesi
+
+# Rütbelerin varsayılan izinleri (MOD her zaman tüm izinlere sahiptir).
+# Her üyenin izinleri ayrıca GUI'den veya /arsa yetkiver|yetkial ile tek tek değiştirilebilir.
+# İzinler: BLOK_KOY, BLOK_KIR, SANDIK, KAPI, MEKANIZMA, ETKILESIM, ESYA_KULLAN,
+#          VARLIK, ITEM_TOPLA, ITEM_AT, DAVET
+rutbe-izinleri:
+  UYE: []
+  GUVENILIR_UYE: [BLOK_KOY, BLOK_KIR, SANDIK, KAPI, MEKANIZMA, ITEM_TOPLA, ITEM_AT]
+  YETKILI: [BLOK_KOY, BLOK_KIR, SANDIK, KAPI, MEKANIZMA, ETKILESIM, ESYA_KULLAN, VARLIK, ITEM_TOPLA, ITEM_AT]
+
+# Yeni kiralanan arsalarda ziyaretçilerin (üye olmayanların) varsayılan izinleri.
+# Boş = tam koruma: ziyaretçiler sadece arsaya girebilir.
+ziyaretci-varsayilan: []

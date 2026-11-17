@@ -1,0 +1,60 @@
+name: Derle
+
+on:
+  push:
+    branches: [ main, dev ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  derle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Maven ile derle
+        id: derleme
+        shell: bash
+        run: |
+          set -o pipefail
+          mvn -B -ntp clean package 2>&1 | tee build.log
+
+      - name: Derleme kaydini yayinla (gecici)
+        if: always() && github.ref == 'refs/heads/dev'
+        shell: bash
+        run: |
+          mkdir -p /tmp/cilog
+          cp build.log /tmp/cilog/build.log 2>/dev/null || echo "build.log yok" > /tmp/cilog/build.log
+          echo "${{ steps.derleme.outcome }} ${{ github.sha }}" > /tmp/cilog/sonuc.txt
+          ls -la target/ > /tmp/cilog/target.txt 2>&1 || true
+          cd /tmp/cilog
+          git init -q
+          git checkout -q -b ci-log
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add -A
+          git commit -qm "derleme ${{ github.sha }}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-log
+
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: GelismisArsa
+          path: target/GelismisArsa-*.jar
+
+      - name: Surum yayinla
+        if: success() && startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/GelismisArsa-*.jar
+          body_path: RELEASE_NOTES.md
