@@ -1,6 +1,8 @@
 package org.jestron.gelismisArsa.model;
 
 import org.bukkit.Material;
+import org.jestron.gelismisArsa.dil.Dil;
+import org.jestron.gelismisArsa.dil.L;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,44 +12,22 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Arsa üzerindeki her bir ayrı işlem izni.
- * Sıralama GUI'deki sıralamadır.
+ * Arsa üzerindeki her bir ayrı işlem izni. Sıralama GUI sıralamasıdır.
+ * Görünen ad ve açıklama dil dosyasındadır: izin.&lt;ENUM&gt;.ad / izin.&lt;ENUM&gt;.aciklama
  */
 public enum Izin {
 
-    BLOK_KOY("blokkoy", "Blok Koyma", Material.BRICKS,
-            "Blok koyabilir, tabela düzenleyebilir,",
-            "kova ile sıvı dökebilir, dekor asabilir."),
-    BLOK_KIR("blokkir", "Blok Kırma", Material.CRACKED_STONE_BRICKS,
-            "Blok kırabilir, kova ile sıvı alabilir,",
-            "tarla ezebilir, ateş söndürebilir."),
-    SANDIK("sandik", "Sandık / Depo Açma", Material.CHEST,
-            "Sandık, varil, shulker, fırın, huni,",
-            "dağıtıcı, demleme standı vb. açabilir."),
-    KAPI("kapi", "Kapı / Tuzak Kapı / Çit Kapısı", Material.OAK_DOOR,
-            "Her tür kapı, tuzak kapı ve çit",
-            "kapısını açıp kapatabilir."),
-    MEKANIZMA("mekanizma", "Düğme / Şalter / Plaka", Material.LEVER,
-            "Düğme, şalter, basınç plakası, tel,",
-            "tekrarlayıcı, nota bloğu, zil vb."),
-    ETKILESIM("etkilesim", "İstasyon / Blok Etkileşimi", Material.CRAFTING_TABLE,
-            "Çalışma masası, örs, büyü masası,",
-            "yatak, saksı, kazan, kamp ateşi vb."),
-    ESYA_KULLAN("esyakullan", "Eşya Kullanma", Material.FLINT_AND_STEEL,
-            "Çakmak, kemik tozu, balta/çapa/kürek,",
-            "spawn yumurtası, boya, fırça vb."),
-    VARLIK("varlik", "Hayvan / Varlık Etkileşimi", Material.ARMOR_STAND,
-            "Hayvan, köylü, zırh askısı, eşya",
-            "çerçevesi, tablo ve araçlar."),
-    ITEM_TOPLA("itemtopla", "Yerden Eşya Alma", Material.HOPPER,
-            "Arsa içinde yere düşmüş",
-            "eşyaları toplayabilir."),
-    ITEM_AT("itemat", "Yere Eşya Atma", Material.DROPPER,
-            "Arsa içindeyken yere",
-            "eşya atabilir."),
-    DAVET("davet", "Üye Davet Etme", Material.WRITABLE_BOOK,
-            "Arsaya yeni üye davet edebilir.",
-            "Davet edilen kişi Üye rütbesiyle katılır.");
+    BLOK_KOY("blokkoy", "place", Material.BRICKS),
+    BLOK_KIR("blokkir", "break", Material.CRACKED_STONE_BRICKS),
+    SANDIK("sandik", "container", Material.CHEST),
+    KAPI("kapi", "door", Material.OAK_DOOR),
+    MEKANIZMA("mekanizma", "redstone", Material.LEVER),
+    ETKILESIM("etkilesim", "interact", Material.CRAFTING_TABLE),
+    ESYA_KULLAN("esyakullan", "useitem", Material.FLINT_AND_STEEL),
+    VARLIK("varlik", "entity", Material.ARMOR_STAND),
+    ITEM_TOPLA("itemtopla", "pickup", Material.HOPPER),
+    ITEM_AT("itemat", "drop", Material.DROPPER),
+    DAVET("davet", "invite", Material.WRITABLE_BOOK);
 
     /** Ziyaretçilere (üye olmayanlara) verilebilecek izinler. */
     public static final Set<Izin> ZIYARETCI_IZINLERI;
@@ -58,37 +38,32 @@ public enum Izin {
         ZIYARETCI_IZINLERI = Collections.unmodifiableSet(z);
     }
 
-    private final String anahtar;
-    private final String ad;
+    private final String anahtarTr;
+    private final String anahtarEn;
     private final Material ikon;
-    private final List<String> aciklama;
 
-    Izin(String anahtar, String ad, Material ikon, String... aciklama) {
-        this.anahtar = anahtar;
-        this.ad = ad;
+    Izin(String anahtarTr, String anahtarEn, Material ikon) {
+        this.anahtarTr = anahtarTr;
+        this.anahtarEn = anahtarEn;
         this.ikon = ikon;
-        this.aciklama = List.of(aciklama);
     }
 
-    public String anahtar() { return anahtar; }
-    public String ad() { return ad; }
+    public String anahtar(Dil dil) { return dil == Dil.EN ? anahtarEn : anahtarTr; }
     public Material ikon() { return ikon; }
-    public List<String> aciklama() { return aciklama; }
+    public String ad(Dil dil) { return L.t(dil, "izin." + name() + ".ad"); }
+    public List<String> aciklama(Dil dil) { return L.l(dil, "izin." + name() + ".aciklama"); }
 
-    /** Komut anahtarı, enum adı veya eski sürüm adıyla izni bulur. */
+    /** Türkçe/İngilizce komut anahtarı veya enum adıyla izni bulur. */
     public static Izin bul(String girdi) {
         if (girdi == null) return null;
         String g = normalize(girdi);
         for (Izin i : values()) {
-            if (i.anahtar.equals(g) || normalize(i.name()).equals(g)) return i;
+            if (i.anahtarTr.equals(g) || i.anahtarEn.equals(g) || normalize(i.name()).equals(g)) return i;
         }
         return null;
     }
 
-    /**
-     * Eski sürümlerdeki izin adlarını yeni izinlere çevirir.
-     * Bilinmeyen adlar için boş liste döner.
-     */
+    /** Eski sürümlerdeki izin adlarını yeni izinlere çevirir. */
     public static List<Izin> eskiAddanCevir(String ad) {
         List<Izin> sonuc = new ArrayList<>(2);
         if (ad == null) return sonuc;
@@ -105,13 +80,13 @@ public enum Izin {
         return sonuc;
     }
 
-    public static List<String> anahtarlar() {
+    public static List<String> anahtarlar(Dil dil) {
         List<String> l = new ArrayList<>(values().length);
-        for (Izin i : values()) l.add(i.anahtar);
+        for (Izin i : values()) l.add(i.anahtar(dil));
         return l;
     }
 
-    static String normalize(String s) {
+    public static String normalize(String s) {
         return s.trim().toLowerCase(Locale.ROOT)
                 .replace("i̇", "i").replace("ı", "i").replace("ş", "s").replace("ğ", "g")
                 .replace("ü", "u").replace("ö", "o").replace("ç", "c")

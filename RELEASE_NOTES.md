@@ -1,28 +1,12 @@
-## GelismisArsa 3.0.0
+## GelismisArsa 3.1.0
 
-Tam yeniden yazım. Taban sürüm **1.20.1**, üst sürümlerde de çalışır (Spigot / Paper).
+### Yeni / New
+- **İki dil / Two languages:** `/arsa` → Türkçe, `/plot` → English. Oyuncunun son kullandığı komut; tüm GUI'leri, mesajları, koruma uyarılarını ve bildirimleri o dilde gösterir ve tercih kaydedilir. Tüm metinler `lang/tr.yml` ve `lang/en.yml` içinde düzenlenebilir.
+- **Tek arsa kuralı / One-plot rule:** Bir oyuncunun adı bir arsada geçiyorsa (sahip veya üye), başka bir arsaya üye olamaz, yetki alamaz ve başka arsa kiralayamaz (`tek-arsa-kurali`).
+- **Admin arsa listesi / Admin plot list:** `/arsa liste` artık 54 slotluk, sayfalı bir GUI. Filtre (tümü / sahipli / sahipsiz), özet, her arsa için sahip, tüm üyeler, rütbeleri ve izinlerinin tek tek gösterildiği detay ekranı, ışınlanma ve yönetim paneline geçiş.
 
-### Kökünden düzeltilen koruma açıkları
-- **Yetkisiz oyuncular kapı, tuzak kapı, sandık ve düğme kullanabiliyordu.** Ana el reddedilince sunucu işlemi yan elle tekrar deniyordu ve yan el hiç kontrol edilmiyordu. Artık her iki el de kontrol ediliyor, red en yüksek öncelikte kesinleştiriliyor ve sandıklar ayrıca envanter açılışında ikinci kez denetleniyor.
-- **OP'ler korumayı otomatik atlatıyordu** (test sırasında koruma çalışmıyor gibi görünüyordu). Atlatma artık sadece `/arsa bypass` ile açılır.
-- Basınç plakası, tarla ezme, ok ile düğme, eşya çerçevesi/zırh askısı, hayvan, araç, kova, tabela, kürsü, olta ile eşya çekme, huniyle depodan eşya çekme açıkları kapatıldı.
-- GUI açıkken oyuncu envanterinin kullanılabilmesi düzeltildi (holder tabanlı tespit; shift-tık, sayı tuşu, sürükleme, çift tık dahil her şey engellenir).
-- `/arsa yetkiver` "oyuncu bulunamadı" hatası düzeltildi.
+### Düzeltme / Fixes
+- Süresi geçmiş sohbet istemi artık oyuncunun normal sohbet mesajını yutmaz.
 
-### Yeni
-- 11 ayrı izin, her üye için tek tek ayarlanabilir; rütbe varsayılanları config'den değiştirilebilir.
-- MOD rütbesi: üyeleri sahibi gibi yönetir; sahibe ve diğer MOD'lara dokunamaz, MOD rütbesi veremez.
-- Ziyaretçi izinleri (varsayılan tam koruma).
-- Yeni GUI: dolgu camı yok, 27 slotluk üye izin ekranı, sayfalı üye listesi, sohbetten davet, onaylı arsadan atma, panelden kira uzatma.
-- Tek komut `/arsa` + eksiksiz tab tamamlama.
-- Çevre koruması: patlama, ateş, sıvı, piston, dağıtıcı, huni, mob tahribatı, ağaç büyümesi (hepsi config'den açılıp kapanır).
-- Kira bitince/terk edilince arsa, oluşturulduğu (veya ilk kiralandığı) andaki **şablona** geri döner.
-- Vault ve WorldEdit artık isteğe bağlı; yoksa koruma ve GUI yine çalışır.
-
-### Performans
-- Konum araması chunk yüklemeden, sınır kutusu + long anahtarlı indeks ile O(1).
-- Blok/eşya izin eşlemesi açılışta bir kez hesaplanır (EnumMap).
-- Kayıt ana thread'i hiç bekletmez: anlık görüntü + tek iş parçacığında atomik dosya yazımı.
-
-### Taşıma
-Eski `config.yml` içindeki arsalar ve `kiralama.yml` otomatik olarak `arsalar.yml` dosyasına taşınır; eski dosyalar yedeklenir.
+### Yükseltme / Upgrade
+Jar'ı değiştirmen yeterli. `config.yml` içindeki yeni ayarlar (`varsayilan-dil`, `tek-arsa-kurali`) yoksa varsayılanlar kullanılır. Dil dosyaları ilk açılışta oluşturulur.

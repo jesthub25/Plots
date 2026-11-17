@@ -4,8 +4,15 @@
 # ║   Değişikliklerden sonra: /arsa yenile                        ║
 # ╚══════════════════════════════════════════════════════════════╝
 
-# Tüm mesajların başındaki önek (& renk kodları kullanılabilir)
-on-ek: '&6&lArsa &8» &7'
+# Dil: oyuncu /arsa kullanınca Türkçe, /plot kullanınca İngilizce olur ve tercihi kaydedilir.
+# Hiç komut kullanmamış oyuncular için varsayılan dil:
+#   otomatik = oyun istemcisinin dili (Türkçe ise tr, değilse en) | tr | en
+# Tüm metinler (önek dahil) lang/tr.yml ve lang/en.yml içinde düzenlenebilir.
+varsayilan-dil: otomatik
+
+# Tek arsa kuralı: bir oyuncunun adı bir arsada geçiyorsa (sahip veya üye),
+# başka bir arsaya üye olamaz, yetki alamaz ve başka arsa kiralayamaz.
+tek-arsa-kurali: true
 
 # Aynı "yetkin yok" mesajının aynı oyuncuya tekrar gönderilmesi için bekleme (ms)
 mesaj-bekleme-ms: 1500

@@ -5,6 +5,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jestron.gelismisArsa.GelismisArsa;
+import org.jestron.gelismisArsa.dil.Dil;
+import org.jestron.gelismisArsa.dil.DilYoneticisi;
 import org.jestron.gelismisArsa.model.Arsa;
 import org.jestron.gelismisArsa.model.ArsaUye;
 import org.jestron.gelismisArsa.model.Izin;
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,16 +41,20 @@ public final class VeriDeposu {
 
     private final GelismisArsa plugin;
     private final ArsaManager arsalar;
+    private final DilYoneticisi diller;
     private final File dosya;
+    private final File oyuncuDosyasi;
     private final ExecutorService yazici;
 
     private boolean kirli;
     private boolean planli;
 
-    public VeriDeposu(GelismisArsa plugin, ArsaManager arsalar) {
+    public VeriDeposu(GelismisArsa plugin, ArsaManager arsalar, DilYoneticisi diller) {
         this.plugin = plugin;
         this.arsalar = arsalar;
+        this.diller = diller;
         this.dosya = new File(plugin.getDataFolder(), "arsalar.yml");
+        this.oyuncuDosyasi = new File(plugin.getDataFolder(), "oyuncular.yml");
         this.yazici = Executors.newSingleThreadExecutor(r -> {
             Thread t = new Thread(r, "GelismisArsa-Kayit");
             t.setDaemon(true);
@@ -58,6 +65,7 @@ public final class VeriDeposu {
     // ── Yükleme ─────────────────────────────────────────────────────────────
 
     public void yukle() {
+        dilleriYukle();
         if (!dosya.exists()) {
             if (eskiVeriVarMi()) {
                 eskiVeriyiTasi();
@@ -82,6 +90,35 @@ public final class VeriDeposu {
         }
         arsalar.yukle(liste, y.getInt("sonraki-id", 1));
         plugin.getLogger().info(liste.size() + " arsa yüklendi.");
+    }
+
+    private void dilleriYukle() {
+        Map<UUID, Dil> m = new HashMap<>();
+        if (oyuncuDosyasi.exists()) {
+            YamlConfiguration y = YamlConfiguration.loadConfiguration(oyuncuDosyasi);
+            ConfigurationSection s = y.getConfigurationSection("dil");
+            if (s != null) {
+                for (String k : s.getKeys(false)) {
+                    Dil d = Dil.bul(s.getString(k));
+                    if (d == null) continue;
+                    try {
+                        m.put(UUID.fromString(k), d);
+                    } catch (IllegalArgumentException ignored) {
+                        // geçersiz satır atlanır
+                    }
+                }
+            }
+        }
+        diller.yukle(m);
+    }
+
+    private String oyuncuGoruntusu() {
+        YamlConfiguration y = new YamlConfiguration();
+        y.options().setHeader(List.of("Oyuncu dil tercihleri (/arsa = tr, /plot = en)."));
+        for (Map.Entry<UUID, Dil> e : diller.tumu().entrySet()) {
+            y.set("dil." + e.getKey(), e.getValue().kod());
+        }
+        return y.saveToString();
     }
 
     private Arsa arsaOku(int id, ConfigurationSection s) {
@@ -130,7 +167,11 @@ public final class VeriDeposu {
             if (kirli) {
                 kirli = false;
                 String veri = anlikGoruntu();
-                yazici.execute(() -> yaz(veri));
+                String oyuncular = oyuncuGoruntusu();
+                yazici.execute(() -> {
+                    yaz(dosya, veri);
+                    yaz(oyuncuDosyasi, oyuncular);
+                });
             }
         }, 40L);
     }
@@ -145,7 +186,8 @@ public final class VeriDeposu {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        yaz(anlikGoruntu());
+        yaz(dosya, anlikGoruntu());
+        yaz(oyuncuDosyasi, oyuncuGoruntusu());
         kirli = false;
     }
 
@@ -188,7 +230,7 @@ public final class VeriDeposu {
         return l;
     }
 
-    private synchronized void yaz(String veri) {
+    private synchronized void yaz(File dosya, String veri) {
         try {
             File klasor = dosya.getParentFile();
             if (!klasor.exists() && !klasor.mkdirs()) {
@@ -204,7 +246,7 @@ public final class VeriDeposu {
                 Files.move(gecici.toPath(), dosya.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException ex) {
-            plugin.getLogger().log(Level.SEVERE, "arsalar.yml kaydedilemedi!", ex);
+            plugin.getLogger().log(Level.SEVERE, dosya.getName() + " kaydedilemedi!", ex);
         }
     }
 
@@ -272,7 +314,7 @@ public final class VeriDeposu {
         }
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
-        yaz(anlikGoruntu());
+        yaz(dosya, anlikGoruntu());
         plugin.getLogger().info(liste.size() + " arsa eski sürümden arsalar.yml dosyasına taşındı. "
                 + "Eski dosyalar config-eski.yml / kiralama-eski.yml olarak yedeklendi.");
     }

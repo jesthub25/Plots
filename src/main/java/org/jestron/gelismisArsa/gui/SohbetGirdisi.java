@@ -32,10 +32,11 @@ public final class SohbetGirdisi implements Listener {
         this.plugin = plugin;
     }
 
-    public void iste(Player p, String soru, Consumer<String> isleyici) {
+    /** @param soruAnahtari dil dosyasındaki soru metni anahtarı */
+    public void iste(Player p, String soruAnahtari, Consumer<String> isleyici) {
         bekleyenler.put(p.getUniqueId(), new Bekleyen(isleyici, System.currentTimeMillis() + SURE_MS));
-        Mesaj.gonder(p, soru);
-        Mesaj.satir(p, "&8(İptal etmek için &7iptal &8yaz • 30 saniye)");
+        Mesaj.gonder(p, soruAnahtari);
+        Mesaj.satir(p, "sohbet.iptal-ipucu");
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -43,17 +44,14 @@ public final class SohbetGirdisi implements Listener {
         UUID u = e.getPlayer().getUniqueId();
         Bekleyen b = bekleyenler.remove(u);
         if (b == null) return;
+        if (System.currentTimeMillis() > b.bitis()) return; // süresi geçmiş istek: normal sohbet
         e.setCancelled(true);
         String metin = e.getMessage().trim();
         Bukkit.getScheduler().runTask(plugin, () -> {
             Player p = Bukkit.getPlayer(u);
             if (p == null) return;
-            if (System.currentTimeMillis() > b.bitis()) {
-                Mesaj.hata(p, "Süre doldu, işlem iptal edildi.");
-                return;
-            }
             if (metin.equalsIgnoreCase("iptal") || metin.equalsIgnoreCase("cancel")) {
-                Mesaj.bilgi(p, "İşlem iptal edildi.");
+                Mesaj.bilgi(p, "sohbet.iptal");
                 return;
             }
             b.isleyici().accept(metin);

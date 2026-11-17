@@ -1,0 +1,475 @@
+# GelismisArsa - Türkçe dil dosyası (/arsa)
+# & renk kodları ve {0}, {1}... yer tutucuları kullanılır.
+# Eksik anahtarlar jar içindeki varsayılandan alınır. Değişiklikten sonra: /arsa yenile
+
+onek: '&6&lArsa &8» &7'
+genel:
+  arsada-degilsin: 'Bir arsanın içinde değilsin.'
+  arsada-durmalisin: 'Bir arsanın içinde durmalısın.'
+  birden-fazla-arsa: 'Birden fazla arsada yer alıyorsun; işlem yapmak istediğin arsanın içinde dur.'
+  oyuncu-yok: '''&f{0}&c'' adında bir oyuncu bulunamadı.'
+  oyuncu-yok-detay: '''&f{0}&c'' adında bir oyuncu bulunamadı (sunucuya en az bir kez girmiş olmalı).'
+  sadece-oyuncu: 'Bu komut sadece oyuncular tarafından kullanılabilir.'
+  sahipsiz: 'Sahipsiz'
+  yetki-yok: 'Bu komutu kullanma yetkin yok.'
+izin:
+  BLOK_KOY:
+    ad: 'Blok Koyma'
+    aciklama:
+      - 'Blok koyabilir, tabela düzenleyebilir,'
+      - 'kova ile sıvı dökebilir, dekor asabilir.'
+  BLOK_KIR:
+    ad: 'Blok Kırma'
+    aciklama:
+      - 'Blok kırabilir, kova ile sıvı alabilir,'
+      - 'tarla ezebilir, ateş söndürebilir.'
+  SANDIK:
+    ad: 'Sandık / Depo Açma'
+    aciklama:
+      - 'Sandık, varil, shulker, fırın, huni,'
+      - 'dağıtıcı, demleme standı vb. açabilir.'
+  KAPI:
+    ad: 'Kapı / Tuzak Kapı / Çit Kapısı'
+    aciklama:
+      - 'Her tür kapı, tuzak kapı ve çit'
+      - 'kapısını açıp kapatabilir.'
+  MEKANIZMA:
+    ad: 'Düğme / Şalter / Plaka'
+    aciklama:
+      - 'Düğme, şalter, basınç plakası, tel,'
+      - 'tekrarlayıcı, nota bloğu, zil vb.'
+  ETKILESIM:
+    ad: 'İstasyon / Blok Etkileşimi'
+    aciklama:
+      - 'Çalışma masası, örs, büyü masası,'
+      - 'yatak, saksı, kazan, kamp ateşi vb.'
+  ESYA_KULLAN:
+    ad: 'Eşya Kullanma'
+    aciklama:
+      - 'Çakmak, kemik tozu, balta/çapa/kürek,'
+      - 'spawn yumurtası, boya, fırça vb.'
+  VARLIK:
+    ad: 'Hayvan / Varlık Etkileşimi'
+    aciklama:
+      - 'Hayvan, köylü, zırh askısı, eşya'
+      - 'çerçevesi, tablo ve araçlar.'
+  ITEM_TOPLA:
+    ad: 'Yerden Eşya Alma'
+    aciklama:
+      - 'Arsa içinde yere düşmüş'
+      - 'eşyaları toplayabilir.'
+  ITEM_AT:
+    ad: 'Yere Eşya Atma'
+    aciklama:
+      - 'Arsa içindeyken yere'
+      - 'eşya atabilir.'
+  DAVET:
+    ad: 'Üye Davet Etme'
+    aciklama:
+      - 'Arsaya yeni üye davet edebilir.'
+      - 'Davet edilen kişi Üye rütbesiyle katılır.'
+rutbe:
+  UYE: '&7Üye'
+  GUVENILIR_UYE: '&aGüvenilir Üye'
+  YETKILI: '&bYetkili'
+  MOD: '&6Mod'
+sure:
+  az: '1dk''dan az'
+  dakika: 'dk'
+  saat: 'sa'
+  gun: 'g'
+  doldu: 'süre doldu'
+koruma:
+  red: '&cBu arsada &f{0} &cyetkin yok.'
+  red-aksiyon: '&c✘ {0} yetkin yok'
+sohbet:
+  iptal-ipucu: '&8(İptal etmek için &7iptal &8yaz • 30 saniye)'
+  iptal: 'İşlem iptal edildi.'
+kira:
+  kapali: 'Kiralama sistemi şu anda kapalı.'
+  ekonomi-yok: 'Ekonomi sistemi bulunamadı (Vault + ekonomi eklentisi gerekli).'
+  zaten-sahipli: 'Bu arsanın zaten bir sahibi var.'
+  sure-sinir: 'Kiralama süresi en az 1 gün, en fazla {0} hafta olabilir.'
+  baska-arsada: 'Zaten &f#{0} &cnumaralı arsada yer alıyorsun (sahip veya üye). Tek arsa kuralı nedeniyle başka arsa kiralayamazsın.'
+  limit: 'En fazla {0} arsa kiralayabilirsin.'
+  para-yok: 'Yeterli paran yok! Gerekli: &f{0}'
+  kiralandi: 'Tebrikler! &f#{0} &anumaralı arsayı &f{1} &asüreyle &f{2} &akarşılığında kiraladın.'
+  kiralandi-bilgi: 'Bitiş: &f{0} &8• &7Yönetim paneli: &f/arsa gui'
+  max-kalan: 'Kalan süre en fazla {0} hafta olabilir. Şu an kalan: &f{1}'
+  uzatildi: 'Kira süresi &f{0} &auzatıldı (&f{1}&a). Yeni bitiş: &f{2}'
+  min-kalan: 'En az 1 saat süre kalmalı. Arsayı bırakmak için: &f/arsa terket'
+  kisaltildi: 'Kira süresi &f{0} &akısaltıldı, &f{1} &aiade edildi. Yeni bitiş: &f{2}'
+  sahip-degil: 'Bu arsanın sahibi sen değilsin.'
+  terk-iade: 'Arsayı terk ettin. Hesabına &f{0} &aiade edildi.'
+  terk: 'Arsayı terk ettin.'
+  sure-doldu: '&f#{0} &cnumaralı arsanın kira süresi doldu, arsa boşaltıldı.'
+  hatirlatma: '&e⚠ &f#{0} &enumaralı arsanın kirası &f{1} &esonra bitiyor. Uzatmak için: &f/arsa sure arttır 1w'
+  kiralik-degil: 'Bu arsa kiralık değil.'
+  sadece-kiraci: 'Kira süresini sadece arsanın kiracısı değiştirebilir.'
+uye:
+  baska-arsada: '&f{0} &czaten &f#{1} &cnumaralı arsada yer alıyor. Tek arsa kuralı: bir oyuncu sadece bir arsada bulunabilir.'
+  sahipsiz-arsa: 'Sahipsiz arsaya üye eklenemez.'
+  davet-yetkisi-yok: 'Bu arsaya üye davet etme yetkin yok.'
+  kendini-davet: 'Kendini davet edemezsin.'
+  zaten-sahip: '&f{0} &czaten bu arsanın sahibi.'
+  zaten-uye: '&f{0} &czaten üye ({1}&c).'
+  davet-basari: '&f{0} &aarsaya {1} &aolarak eklendi.'
+  davet-bildirim: '&a{0} seni &f#{1} &anumaralı arsaya üye olarak ekledi.'
+  uye-degil: '&f{0} &cbu arsanın üyesi değil.'
+  atildi: '&f{0} &aarsadan atıldı.'
+  atildi-bildirim: '&c{0} seni &f#{1} &cnumaralı arsadan attı.'
+  sahip-rutbe: 'Arsa sahibinin rütbesi değiştirilemez.'
+  mod-sadece-sahip: 'MOD rütbesini sadece arsa sahibi verebilir.'
+  zaten-rutbe: '&f{0} &czaten {1}&c.'
+  eklendi-rutbe: '&f{0} &aarsaya eklendi, rütbesi: {1}'
+  rutbe-guncellendi: '&f{0} &arütbesi güncellendi: {1}'
+  rutbe-bildirim: '&a#{0} numaralı arsadaki rütben: {1}'
+  en-yuksek: 'Bu üye zaten en yüksek rütbede.'
+  en-dusuk: 'Bu üye zaten en düşük rütbede.'
+  sahip-tum-izinler: 'Arsa sahibi zaten tüm izinlere sahiptir.'
+  otomatik-eklendi: '&f{0} &7arsaya {1} &7olarak eklendi.'
+  mod-tum-izinler: 'MOD rütbesi tüm izinlere sahiptir. Önce rütbesini düşür.'
+  izin-acildi: '&f{0} &aiçin &f{1} &aizni &2AÇILDI&a.'
+  izin-kapandi: '&f{0} &aiçin &f{1} &aizni &cKAPATILDI&a.'
+  varsayilana-dondu: '&f{0} &aizinleri rütbe varsayılanına döndürüldü.'
+  tum-acildi: '&f{0} &aiçin tüm izinler &2AÇILDI&a.'
+  tum-kapandi: '&f{0} &aiçin tüm izinler &cKAPATILDI&a.'
+  red:
+    kendin: 'Kendi yetkilerini değiştiremezsin.'
+    sahip: 'Arsa sahibine hiçbir işlem yapılamaz.'
+    mod-mod: 'MOD''lar diğer MOD''ları yönetemez.'
+    genel: 'Bu işlem için arsa sahibi veya MOD olmalısın.'
+ziyaretci:
+  yetki-yok: 'Ziyaretçi izinlerini sadece arsa sahibi ve MOD''lar değiştirebilir.'
+  verilemez: '{0} izni ziyaretçilere verilemez.'
+  acildi: 'Ziyaretçiler için &f{0} &aizni &2AÇILDI&a.'
+  kapandi: 'Ziyaretçiler için &f{0} &aizni &cKAPATILDI&a.'
+  tum-acildi: 'Ziyaretçiler için tüm izinler &2AÇILDI&a.'
+  tum-kapandi: 'Ziyaretçiler için tüm izinler &cKAPATILDI&a.'
+komut:
+  kirala:
+    arsada-degil: 'Kiralamak için bir arsanın içinde durmalısın.'
+    kullanim: 'Kullanım: &f/arsa kirala <süre> &8(ör: 1w, 2w, 3d)'
+    ucret: 'Haftalık ücret: &f{0} &8• &7En fazla: &f{1} hafta'
+    gecersiz: 'Geçersiz süre. Örnek: &f1w &c(1 hafta), &f3d &c(3 gün)'
+  terket:
+    arsada-degil: 'Terk etmek için kendi arsanın içinde durmalısın.'
+    uyari: '&e⚠ &f#{0} &enumaralı arsayı terk etmek üzeresin.'
+    iade: '&7  İade edilecek tutar: &f{0}'
+    sifirlanir: '&7  Tüm üyeler çıkarılır ve arsa sıfırlanır.'
+    uyeler: '&7  Tüm üyeler çıkarılır.'
+    onayla: '&7  Onaylamak için: &f/{0} terket onayla'
+  sure:
+    kullanim: 'Kullanım: &f/arsa sure <arttır|azalt> <süre> &8(ör: 1w, 2d, 12h)'
+    gecersiz: 'Geçersiz süre. Örnek: &f1w&c, &f2d&c, &f12h'
+    gecersiz-islem: 'Geçersiz işlem. &farttır &cveya &fazalt &ckullan.'
+  bilgi:
+    baslik: '&8&m          &r &6&lArsa #{0} &8&m          '
+    boyut: '&7Dünya: &f{0} &8• &7Boyut: &f{1} &8(yükseklik {2})'
+    konum: '&7Konum: &f{0}'
+    sahipsiz: '&7Durum: &aSahipsiz &8• &7Kiralamak için: &f/arsa kirala <süre>'
+    ucret: '&7Haftalık ücret: &f{0}'
+    sahip: '&7Sahip: &f{0}'
+    kira: '&7Kira bitişi: &f{0} &8({1})'
+    uye-yok: '&7Üyeler: &8yok'
+    uye-oge: '&f{0} &8({1}&8)'
+    ayrac: '&7, '
+    uyeler: '&7Üyeler: {0}'
+    ziyaretci-yok: '&7Ziyaretçi izinleri: &8yok (tam koruma)'
+    ziyaretci: '&7Ziyaretçi izinleri: &f{0}'
+    benim-yok: '&7Senin izinlerin: &cyok'
+    benim: '&7Senin izinlerin: &a{0}'
+  sahip:
+    sahip: '&f#{0} &7numaralı arsanın sahibi: &f{1}'
+    sahipsiz: 'Bu arsa sahipsiz. Kiralamak için: &f/arsa kirala <süre>'
+  gui:
+    yetki-yok: 'Yönetim panelini sadece arsa sahibi ve MOD''lar açabilir.'
+  yetkiver:
+    kullanim: 'Kullanım: &f/arsa yetkiver <oyuncu> [rütbe|izin|hepsi]'
+    gecersiz: '''&f{0}&c'' geçerli bir rütbe veya izin değil.'
+  liste-rutbe-izin: 'Rütbeler: &f{0} &8• &7İzinler: &f/arsa izinler'
+  yetkial:
+    kullanim: 'Kullanım: &f/arsa yetkial <oyuncu> [izin|hepsi]'
+  izin-gecersiz: '''&f{0}&c'' geçerli bir izin değil. İzinler: &f{1}'
+  izinler:
+    baslik: '&8&m        &r &6&lArsa İzinleri &8&m        '
+    satir: '&e{0} &8- &f{1} &8» &7{2}'
+    rutbeler: '&6Rütbeler: &f{0}'
+    ipucu:
+      - '&7Ver: &f/arsa yetkiver <oyuncu> <izin|rütbe|hepsi>'
+      - '&7Al: &f/arsa yetkial <oyuncu> <izin|hepsi> &8(izin yazmazsan arsadan atar)'
+  ziyaretci:
+    kullanim: 'Kullanım: &f/arsa ziyaretci <izin|hepsi> <aç|kapat>'
+  olustur:
+    koordinat: 'Koordinatlar tam sayı olmalı (veya ~ kullan).'
+    kullanim-koordinat: 'Kullanım: &f/arsa olustur <x1> <y1> <z1> <x2> <y2> <z2>'
+    secim-yok: 'Önce WorldEdit ile bir bölge seç (//wand) veya koordinat gir.'
+    kullanim: 'Kullanım: &f/arsa olustur &8(WorldEdit seçimi) &cveya &f/arsa olustur <x1> <y1> <z1> <x2> <y2> <z2>'
+    cakisma: 'Bu bölge &f#{0} &cnumaralı arsa ile çakışıyor.'
+    basari: '&f#{0} &anumaralı arsa oluşturuldu &8({1})'
+    basari-sablon: '&f#{0} &anumaralı arsa oluşturuldu &8({1}) &7• şablon kaydedildi'
+  sil:
+    arsada-degil: 'Silinecek arsanın içinde durmalısın.'
+    uyari-sahipli: '&e⚠ &f#{0} &earsası (sahibi: &f{1}&e) kalıcı olarak silinecek.'
+    uyari: '&e⚠ &f#{0} &earsası kalıcı olarak silinecek.'
+    onayla: '&7  Onaylamak için: &f/{0} sil onayla'
+    basari: '&f#{0} &anumaralı arsa silindi.'
+    bildirim: '&f#{0} &cnumaralı arsan bir yetkili tarafından silindi.'
+  liste:
+    bos: 'Kayıtlı arsa yok.'
+    gecersiz-sayfa: 'Geçersiz sayfa numarası.'
+    baslik: '&8&m      &r &6&lArsalar &8({0}/{1}) &8&m      '
+    satir: '&e#{0} &8» &f{1} &8• &7{2} &8{3} &8• &7{4} üye'
+    sonraki: '&7Sonraki sayfa: &f/{0} {1} {2}'
+  bypass:
+    acik: 'Koruma atlatma &2AÇIK&a. Tüm arsalarda her şeyi yapabilirsin.'
+    kapali: 'Koruma atlatma &cKAPALI&a. Arsa korumaları sana da uygulanır.'
+  sablon:
+    we-yok: 'Bu özellik için WorldEdit gerekli.'
+    arsada-degil: 'Şablonu kaydedilecek arsanın içinde durmalısın.'
+    basari: '&f#{0} &aarsasının şu anki hali sıfırlama şablonu olarak kaydedildi.'
+    hata: 'Şablon kaydedilemedi, konsolu kontrol et.'
+  yenile:
+    basari: 'config.yml ve dil dosyaları yeniden yüklendi.'
+yardim:
+  oyuncu:
+    - '&8&m          &r &6&lGelismisArsa &8&m          '
+    - '&e/arsa kirala <süre> &8» &7Bulunduğun sahipsiz arsayı kirala'
+    - '&e/arsa terket &8» &7Arsanı bırak, kalan süre iade edilir'
+    - '&e/arsa sure <arttır|azalt> <süre> &8» &7Kira süresini yönet'
+    - '&e/arsa bilgi &8» &7Arsa bilgileri ve senin izinlerin'
+    - '&e/arsa sahip &8» &7Arsanın sahibi'
+    - '&e/arsa gui &8» &7Yönetim paneli (sahip ve MOD)'
+    - '&e/arsa yetkiver <oyuncu> [rütbe|izin|hepsi] &8» &7Davet / yetki ver'
+    - '&e/arsa yetkial <oyuncu> [izin|hepsi] &8» &7Yetki al / arsadan at'
+    - '&e/arsa ziyaretci [izin] [aç|kapat] &8» &7Ziyaretçi izinleri'
+    - '&e/arsa izinler &8» &7Tüm izinlerin listesi'
+    - '&8English: &7/plot help'
+  admin:
+    - '&c/arsa olustur [x1 y1 z1 x2 y2 z2] &8» &7Arsa oluştur (boş = WorldEdit seçimi)'
+    - '&c/arsa sil onayla &8» &7Bulunduğun arsayı sil'
+    - '&c/arsa liste &8» &7Tüm arsalar (GUI)'
+    - '&c/arsa sablon &8» &7Arsanın sıfırlama şablonunu kaydet'
+    - '&c/arsa bypass &8» &7Koruma atlatmayı aç/kapat'
+    - '&c/arsa yenile &8» &7config.yml ve dil dosyalarını yeniden yükle'
+menu:
+  acamazsin: 'Bu menüyü açma yetkin yok.'
+  yetki-kalmadi: 'Bu işlem için yetkin artık yok.'
+  kapat: '&c&lKapat'
+  geri-ad: '&e« Geri'
+  geri:
+    panel: '&7Yönetim paneline dön.'
+    uyeler: '&7Üye listesine dön.'
+    liste: '&7Arsa listesine dön.'
+  onceki: '&e‹ Önceki Sayfa'
+  sonraki: '&eSonraki Sayfa ›'
+  tumunu-ac: '&a&lTümünü Aç'
+  tumunu-kapat: '&c&lTümünü Kapat'
+  ana:
+    baslik: '&8Arsa &7#{0} &8» &0Yönetim'
+    bilgi:
+      ad: '&e&lArsa #{0}'
+      lore:
+        - '&7Dünya: &f{0}'
+        - '&7Boyut: &f{1} &8(yükseklik {2})'
+        - '&7Konum: &f{3}'
+        - ''
+        - '&7Sahip: &f{4}'
+        - '&7Üye: &f{5}'
+      kira:
+        - '&7Kira bitişi: &f{0}'
+        - '&7Kalan: &f{1}'
+    uyeler:
+      ad: '&b&lÜyeler'
+      lore:
+        - '&7Arsa üyelerini görüntüle, rütbe'
+        - '&7ve izinlerini tek tek düzenle,'
+        - '&7yeni üye davet et.'
+        - ''
+        - '&7Üye sayısı: &f{0}'
+        - ''
+        - '&e▶ Tıkla'
+    ziyaretci:
+      ad: '&a&lZiyaretçi İzinleri'
+      hicbiri: '&cHiçbiri &8(tam koruma)'
+      sayi: '&f{0}&7/&f{1}'
+      lore:
+        - '&7Üye olmayan oyuncuların arsanda'
+        - '&7neleri yapabileceğini belirle.'
+        - ''
+        - '&7Açık izin: {0}'
+        - ''
+        - '&e▶ Tıkla'
+    kira:
+      ad: '&6&lKira Süresi'
+      kiralik-degil: '&7Bu arsa kiralık değil.'
+      durum:
+        - '&7Kalan: &f{0}'
+        - '&7Bitiş: &f{1}'
+      uzat:
+        - ''
+        - '&eSol Tık &8» &7+1 gün uzat &8(&f{0}&8)'
+        - '&eSağ Tık &8» &7+1 hafta uzat &8(&f{1}&8)'
+        - ''
+        - '&8Kısaltmak / terk: /arsa sure azalt, /arsa terket'
+      sadece-kiraci:
+        - ''
+        - '&8Süreyi sadece kiracı uzatabilir.'
+  uyeler:
+    baslik: '&8Arsa &7#{0} &8» &0Üyeler'
+    baslik-sayfa: '&8Arsa &7#{0} &8» &0Üyeler &8({1}/{2})'
+    davet:
+      ad: '&a&l+ Üye Davet Et'
+      lore:
+        - '&7Tıkla ve davet etmek istediğin'
+        - '&7oyuncunun adını sohbete yaz.'
+        - ''
+        - '&8Komut: /arsa yetkiver <oyuncu> [rütbe|izin]'
+      soru: '&aDavet etmek istediğin oyuncunun adını sohbete yaz.'
+  uye:
+    sahip:
+      ad: '&6&l{0}'
+      lore:
+        - '&6★ Arsa Sahibi'
+        - '&7Tüm izinlere sahiptir.'
+    ad: '&f&l{0}'
+    rutbe: '&7Rütbe: {0}'
+    mod-tum: '&6Tüm izinlere sahip &8(yönetici)'
+    izin-acik: '&a✔ &7{0}'
+    izin-kapali: '&c✘ &7{0}'
+    ozel-isaret: ' &e*'
+    acik-sayi: '&7Açık izin: &f{0}&7/&f{1}'
+    ozel-aciklama: '&e* &8= özel ayar'
+    tikla-duzenle: '&e▶ Tıkla: rütbe ve izinleri düzenle'
+    yonetemezsin: '&8Bu üyeyi yönetemezsin.'
+  rehber:
+    ad: '&6&lRütbe Rehberi'
+    mod:
+      - '&8• Tüm izinler + üye yönetimi'
+      - '&8• Sahibe ve MOD''lara dokunamaz'
+      - '&8• MOD rütbesi veremez'
+    sadece-giris: '&8• Sadece arsaya girebilir'
+    madde: '&8• {0}'
+    not: '&8Rütbe değişince özel izin ayarları sıfırlanır.'
+  uyeizin:
+    baslik: '&8Üye &8» &0{0}'
+    dusur:
+      ad: '&c&l▼ Rütbe Düşür'
+      pasif: '&7▼ Rütbe Düşür'
+    yukselt:
+      ad: '&a&l▲ Rütbe Yükselt'
+      pasif: '&7▲ Rütbe Yükselt'
+    en-dusuk: '&8Zaten en düşük rütbe.'
+    en-yuksek: '&8Zaten en yüksek rütbe.'
+    rutbe-degisim:
+      - '&7Şu an: {0}'
+      - '&7Yeni: {1}'
+      - ''
+      - '&8Özel izin ayarları sıfırlanır.'
+      - ''
+      - '&e▶ Tıkla'
+    sadece-sahip-verir:
+      - '{0} &8rütbesini sadece'
+      - '&8arsa sahibi verebilir.'
+    mod-bilgi:
+      - '&6Tüm izinlere sahiptir.'
+      - '&7Üyeleri yönetebilir ve davet edebilir.'
+    ipucu:
+      - '&8Parlayan izinler açıktır.'
+      - '&8Bir izne tıklayarak aç/kapat.'
+    at:
+      ad: '&c&lArsadan At'
+      lore:
+        - '&7Üyeyi arsadan tamamen çıkarır.'
+        - ''
+        - '&e▶ Tıkla'
+      onay-ad: '&4&lEMİN MİSİN?'
+      onay-lore:
+        - '&c{0} arsadan atılacak.'
+        - ''
+        - '&eOnaylamak için tekrar tıkla.'
+    mod-acik: '&6✔ MOD rütbesi ile açık'
+    tumunu-ac-lore: '&7Tüm izinleri bu üye için açar.'
+    tumunu-kapat-lore:
+      - '&7Tüm izinleri bu üye için kapatır.'
+      - '&8(Üye sadece arsaya girebilir.)'
+    sifirla:
+      ad: '&e&lVarsayılana Döndür'
+      lore:
+        - '&7Özel ayarları siler, {0}'
+        - '&7rütbesinin varsayılanlarını uygular.'
+  izin:
+    ad-acik: '&a{0}'
+    ad-kapali: '&c{0}'
+    ad-mod: '&6{0}'
+    durum-acik: '&7Durum: &a✔ AÇIK {0}'
+    durum-kapali: '&7Durum: &c✘ KAPALI {0}'
+    kaynak:
+      ozel: '&e(özel ayar)'
+      rutbe: '&8(rütbe varsayılanı)'
+      ziyaretci: '&8(ziyaretçi izni)'
+    tikla-ac: '&e▶ Tıkla: aç'
+    tikla-kapat: '&e▶ Tıkla: kapat'
+  ziyaretci:
+    baslik: '&8Arsa &7#{0} &8» &0Ziyaretçiler'
+    bilgi:
+      - '&7Arsanın üyesi olmayan HERKES için'
+      - '&7geçerlidir. Varsayılan: tam koruma.'
+      - ''
+      - '&7Açık izin: &f{0}&7/&f{1}'
+      - ''
+      - '&c⚠ Açtığın izinleri sunucudaki'
+      - '&cherkes kullanabilir!'
+    yapabilir: '&7Ziyaretçiler: &a✔ YAPABİLİR'
+    yapamaz: '&7Ziyaretçiler: &c✘ YAPAMAZ'
+    tumunu-ac-lore:
+      - '&7Ziyaretçiler arsada her şeyi'
+      - '&7yapabilir hale gelir.'
+    tumunu-kapat-lore:
+      - '&7Tam koruma: ziyaretçiler sadece'
+      - '&7arsaya girebilir.'
+  liste:
+    baslik: '&8Arsalar &8({0}/{1})'
+    bos: '&7Gösterilecek arsa yok.'
+    silinmis: 'Bu arsa artık mevcut değil.'
+    arsa:
+      ad-sahipli: '&e&l#{0} &8» &f{1}'
+      ad-sahipsiz: '&e&l#{0} &8» &aSahipsiz'
+      lore:
+        - '&7Dünya: &f{0}'
+        - '&7Boyut: &f{1}'
+        - '&7Konum: &f{2}'
+        - '&7Üye: &f{3}'
+        - '&7Ziyaretçi izni: &f{4}'
+      kira: '&7Kira kalan: &f{0}'
+      tikla: '&e▶ Tıkla: tüm detaylar'
+    filtre:
+      ad: '&b&lFiltre'
+      tumu: 'Tümü'
+      sahipli: 'Sahipli'
+      sahipsiz: 'Sahipsiz'
+      secili: '&a▶ {0}'
+      secili-degil: '&7  {0}'
+      tikla: '&e▶ Tıkla: filtreyi değiştir'
+    ozet:
+      ad: '&6&lÖzet'
+      lore:
+        - '&7Toplam arsa: &f{0}'
+        - '&7Sahipli: &f{1}'
+        - '&7Sahipsiz: &f{2}'
+        - '&7Kiralık: &f{3}'
+        - '&7Toplam üye: &f{4}'
+        - ''
+        - '&7Bu filtrede: &f{5}'
+  detay:
+    baslik: '&8Arsa &7#{0} &8» &0Detaylar'
+    sahipsiz: '&a&lSahipsiz Arsa'
+    isinlan:
+      ad: '&d&lIşınlan'
+      lore: '&7Arsanın ortasına ışınlanır.'
+    isinlandi: '&f#{0} &anumaralı arsaya ışınlandın.'
+    dunya-yok: '''&f{0}&c'' dünyası yüklü değil.'
+    uye-yok: '&7Bu arsanın üyesi yok.'
+    yonet:
+      ad: '&b&lArsayı Yönet'
+      lore: '&7Yönetim panelini sahibi gibi aç.'

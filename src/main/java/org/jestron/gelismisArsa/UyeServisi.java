@@ -3,6 +3,7 @@ package org.jestron.gelismisArsa;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jestron.gelismisArsa.dil.Dil;
 import org.jestron.gelismisArsa.model.Arsa;
 import org.jestron.gelismisArsa.model.ArsaUye;
 import org.jestron.gelismisArsa.model.Izin;
@@ -13,8 +14,8 @@ import org.jestron.gelismisArsa.util.OyuncuBul;
 import java.util.UUID;
 
 /**
- * Üye işlemleri. Komutlar ve GUI aynı metotları kullanır; böylece kurallar tek yerde uygulanır.
- * Her metot yetkiyi kendisi doğrular, mesaj gönderir ve değişikliği kaydeder.
+ * Üye işlemleri. Komutlar ve GUI aynı metotları kullanır; kurallar tek yerde uygulanır.
+ * Her metot yetkiyi ve tek arsa kuralını kendisi doğrular, mesaj gönderir ve kaydeder.
  */
 public final class UyeServisi {
 
@@ -28,34 +29,52 @@ public final class UyeServisi {
         return plugin.yetki();
     }
 
+    private static Dil d(Player p) {
+        return Mesaj.dil(p);
+    }
+
+    /**
+     * Tek arsa kuralı: oyuncu başka bir arsanın sahibi veya üyesiyse bu arsaya eklenemez.
+     * @return engel varsa true (mesaj gönderilmiştir)
+     */
+    private boolean baskaArsadaMi(Player yapan, Arsa arsa, UUID hedef, String ad) {
+        if (!plugin.ayarlar().tekArsaKurali) return false;
+        Arsa diger = plugin.arsalar().iliskiliArsa(hedef, arsa);
+        if (diger == null) return false;
+        Mesaj.hata(yapan, "uye.baska-arsada", ad, diger.id());
+        return true;
+    }
+
     public boolean davet(Player yapan, Arsa arsa, OfflinePlayer hedef) {
         if (!arsa.sahibiVar()) {
-            Mesaj.hata(yapan, "Sahipsiz arsaya üye eklenemez.");
+            Mesaj.hata(yapan, "uye.sahipsiz-arsa");
             return false;
         }
         if (!yetki().davetEdebilir(yapan, arsa)) {
-            Mesaj.hata(yapan, "Bu arsaya üye davet etme yetkin yok.");
+            Mesaj.hata(yapan, "uye.davet-yetkisi-yok");
             return false;
         }
         UUID h = hedef.getUniqueId();
         String ad = ad(hedef);
         if (h.equals(yapan.getUniqueId())) {
-            Mesaj.hata(yapan, "Kendini davet edemezsin.");
+            Mesaj.hata(yapan, "uye.kendini-davet");
             return false;
         }
         if (arsa.sahipMi(h)) {
-            Mesaj.hata(yapan, ad + " zaten bu arsanın sahibi.");
+            Mesaj.hata(yapan, "uye.zaten-sahip", ad);
             return false;
         }
         ArsaUye mevcut = arsa.uye(h);
         if (mevcut != null) {
-            Mesaj.hata(yapan, ad + " zaten üye (" + mevcut.rutbe().gorunenAd() + "&c).");
+            Mesaj.hata(yapan, "uye.zaten-uye", ad, mevcut.rutbe().ad(d(yapan)));
             return false;
         }
+        if (baskaArsadaMi(yapan, arsa, h, ad)) return false;
         arsa.uyeEkle(h, Rutbe.UYE);
         kaydet();
-        Mesaj.basari(yapan, "&f" + ad + " &aarsaya " + Rutbe.UYE.gorunenAd() + " &aolarak eklendi.");
-        bildir(h, "&a" + yapan.getName() + " seni &f#" + arsa.id() + " &anumaralı arsaya üye olarak ekledi.");
+        Mesaj.basari(yapan, "uye.davet-basari", ad, Rutbe.UYE.ad(d(yapan)));
+        Player hp = Bukkit.getPlayer(h);
+        if (hp != null) Mesaj.gonder(hp, "uye.davet-bildirim", yapan.getName(), arsa.id());
         return true;
     }
 
@@ -63,17 +82,18 @@ public final class UyeServisi {
         ArsaUye uye = arsa.uye(hedef);
         String ad = OyuncuBul.isim(hedef);
         if (uye == null) {
-            Mesaj.hata(yapan, ad + " bu arsanın üyesi değil.");
+            Mesaj.hata(yapan, "uye.uye-degil", ad);
             return false;
         }
         if (!yetki().yonetebilir(yapan, arsa, hedef)) {
-            Mesaj.hata(yapan, yonetimRedSebebi(yapan, arsa, hedef));
+            yonetimRed(yapan, arsa, hedef);
             return false;
         }
         arsa.uyeCikar(hedef);
         kaydet();
-        Mesaj.basari(yapan, "&f" + ad + " &aarsadan atıldı.");
-        bildir(hedef, "&c" + yapan.getName() + " seni &f#" + arsa.id() + " &cnumaralı arsadan attı.");
+        Mesaj.basari(yapan, "uye.atildi", ad);
+        Player hp = Bukkit.getPlayer(hedef);
+        if (hp != null) Mesaj.gonder(hp, "uye.atildi-bildirim", yapan.getName(), arsa.id());
         return true;
     }
 
@@ -81,34 +101,35 @@ public final class UyeServisi {
         UUID hedef = hedefOyuncu.getUniqueId();
         String ad = ad(hedefOyuncu);
         if (arsa.sahipMi(hedef)) {
-            Mesaj.hata(yapan, "Arsa sahibinin rütbesi değiştirilemez.");
+            Mesaj.hata(yapan, "uye.sahip-rutbe");
             return false;
         }
         if (!yetki().yonetebilir(yapan, arsa, hedef)) {
-            Mesaj.hata(yapan, yonetimRedSebebi(yapan, arsa, hedef));
+            yonetimRed(yapan, arsa, hedef);
             return false;
         }
         if (!yetki().rutbeVerebilir(yapan, arsa, hedef, rutbe)) {
-            Mesaj.hata(yapan, "MOD rütbesini sadece arsa sahibi verebilir.");
+            Mesaj.hata(yapan, "uye.mod-sadece-sahip");
             return false;
         }
         ArsaUye uye = arsa.uye(hedef);
         boolean yeni = uye == null;
         if (yeni) {
             if (!yetki().davetEdebilir(yapan, arsa)) {
-                Mesaj.hata(yapan, "Bu arsaya üye davet etme yetkin yok.");
+                Mesaj.hata(yapan, "uye.davet-yetkisi-yok");
                 return false;
             }
+            if (baskaArsadaMi(yapan, arsa, hedef, ad)) return false;
             uye = arsa.uyeEkle(hedef, rutbe);
         } else if (uye.rutbe() == rutbe) {
-            Mesaj.hata(yapan, ad + " zaten " + rutbe.gorunenAd() + "&c.");
+            Mesaj.hata(yapan, "uye.zaten-rutbe", ad, rutbe.ad(d(yapan)));
             return false;
         }
         uye.rutbeAyarla(rutbe);
         kaydet();
-        Mesaj.basari(yapan, "&f" + ad + " &a" + (yeni ? "arsaya eklendi, rütbesi: " : "rütbesi güncellendi: ")
-                + rutbe.gorunenAd());
-        bildir(hedef, "&a#" + arsa.id() + " numaralı arsadaki rütben: " + rutbe.gorunenAd());
+        Mesaj.basari(yapan, yeni ? "uye.eklendi-rutbe" : "uye.rutbe-guncellendi", ad, rutbe.ad(d(yapan)));
+        Player hp = Bukkit.getPlayer(hedef);
+        if (hp != null) Mesaj.gonder(hp, "uye.rutbe-bildirim", arsa.id(), rutbe.ad(d(hp)));
         return true;
     }
 
@@ -118,7 +139,7 @@ public final class UyeServisi {
         if (uye == null) return false;
         Rutbe yeni = yukari ? uye.rutbe().sonraki() : uye.rutbe().onceki();
         if (yeni == uye.rutbe()) {
-            Mesaj.hata(yapan, yukari ? "Bu üye zaten en yüksek rütbede." : "Bu üye zaten en düşük rütbede.");
+            Mesaj.hata(yapan, yukari ? "uye.en-yuksek" : "uye.en-dusuk");
             return false;
         }
         return rutbeVer(yapan, arsa, Bukkit.getOfflinePlayer(hedef), yeni);
@@ -128,35 +149,35 @@ public final class UyeServisi {
         UUID hedef = hedefOyuncu.getUniqueId();
         String ad = ad(hedefOyuncu);
         if (arsa.sahipMi(hedef)) {
-            Mesaj.hata(yapan, "Arsa sahibi zaten tüm izinlere sahiptir.");
+            Mesaj.hata(yapan, "uye.sahip-tum-izinler");
             return false;
         }
         if (!yetki().yonetebilir(yapan, arsa, hedef)) {
-            Mesaj.hata(yapan, yonetimRedSebebi(yapan, arsa, hedef));
+            yonetimRed(yapan, arsa, hedef);
             return false;
         }
         ArsaUye uye = arsa.uye(hedef);
         if (uye == null) {
             if (!deger) {
-                Mesaj.hata(yapan, ad + " bu arsanın üyesi değil.");
+                Mesaj.hata(yapan, "uye.uye-degil", ad);
                 return false;
             }
             if (!yetki().davetEdebilir(yapan, arsa)) {
-                Mesaj.hata(yapan, "Bu arsaya üye davet etme yetkin yok.");
+                Mesaj.hata(yapan, "uye.davet-yetkisi-yok");
                 return false;
             }
+            if (baskaArsadaMi(yapan, arsa, hedef, ad)) return false;
             uye = arsa.uyeEkle(hedef, Rutbe.UYE);
-            Mesaj.bilgi(yapan, "&f" + ad + " &7arsaya " + Rutbe.UYE.gorunenAd() + " &7olarak eklendi.");
+            Mesaj.bilgi(yapan, "uye.otomatik-eklendi", ad, Rutbe.UYE.ad(d(yapan)));
         }
         if (uye.rutbe() == Rutbe.MOD) {
-            Mesaj.hata(yapan, "MOD rütbesi tüm izinlere sahiptir. Önce rütbesini düşür.");
+            Mesaj.hata(yapan, "uye.mod-tum-izinler");
             return false;
         }
         uye.izinAyarla(izin, deger);
         kaydet();
         if (!sessiz) {
-            Mesaj.basari(yapan, "&f" + ad + " &aiçin &f" + izin.ad() + " &aizni "
-                    + (deger ? "&2AÇILDI" : "&cKAPATILDI") + "&a.");
+            Mesaj.basari(yapan, deger ? "uye.izin-acildi" : "uye.izin-kapandi", ad, izin.ad(d(yapan)));
         }
         return true;
     }
@@ -164,58 +185,62 @@ public final class UyeServisi {
     /** Tüm izinleri aç (true), kapat (false) veya rütbe varsayılanına döndür (null). */
     public boolean tumIzinler(Player yapan, Arsa arsa, OfflinePlayer hedefOyuncu, Boolean deger) {
         UUID hedef = hedefOyuncu.getUniqueId();
+        String ad = ad(hedefOyuncu);
         ArsaUye uye = arsa.uye(hedef);
         if (uye == null && deger != Boolean.TRUE) {
-            Mesaj.hata(yapan, ad(hedefOyuncu) + " bu arsanın üyesi değil.");
+            Mesaj.hata(yapan, "uye.uye-degil", ad);
             return false;
         }
         if (deger == null) {
             if (!yetki().yonetebilir(yapan, arsa, hedef)) {
-                Mesaj.hata(yapan, yonetimRedSebebi(yapan, arsa, hedef));
+                yonetimRed(yapan, arsa, hedef);
                 return false;
             }
             uye.ozelleriSifirla();
             kaydet();
-            Mesaj.basari(yapan, "&f" + ad(hedefOyuncu) + " &aizinleri rütbe varsayılanına döndürüldü.");
+            Mesaj.basari(yapan, "uye.varsayilana-dondu", ad);
             return true;
         }
         for (Izin i : Izin.values()) {
             if (!izinAyarla(yapan, arsa, hedefOyuncu, i, deger, true)) return false;
         }
-        Mesaj.basari(yapan, "&f" + ad(hedefOyuncu) + " &aiçin tüm izinler " + (deger ? "&2AÇILDI" : "&cKAPATILDI") + "&a.");
+        Mesaj.basari(yapan, deger ? "uye.tum-acildi" : "uye.tum-kapandi", ad);
         return true;
     }
 
     public boolean ziyaretciAyarla(Player yapan, Arsa arsa, Izin izin, boolean deger, boolean sessiz) {
         if (!yetki().ziyaretciDuzenleyebilir(yapan, arsa)) {
-            Mesaj.hata(yapan, "Ziyaretçi izinlerini sadece arsa sahibi ve MOD'lar değiştirebilir.");
+            Mesaj.hata(yapan, "ziyaretci.yetki-yok");
             return false;
         }
         if (!Izin.ZIYARETCI_IZINLERI.contains(izin)) {
-            Mesaj.hata(yapan, izin.ad() + " izni ziyaretçilere verilemez.");
+            Mesaj.hata(yapan, "ziyaretci.verilemez", izin.ad(d(yapan)));
             return false;
         }
         arsa.ziyaretciAyarla(izin, deger);
         kaydet();
         if (!sessiz) {
-            Mesaj.basari(yapan, "Ziyaretçiler için &f" + izin.ad() + " &aizni " + (deger ? "&2AÇILDI" : "&cKAPATILDI") + "&a.");
+            Mesaj.basari(yapan, deger ? "ziyaretci.acildi" : "ziyaretci.kapandi", izin.ad(d(yapan)));
         }
         return true;
     }
 
-    public String yonetimRedSebebi(Player yapan, Arsa arsa, UUID hedef) {
-        if (hedef.equals(yapan.getUniqueId())) return "Kendi yetkilerini değiştiremezsin.";
-        if (arsa.sahipMi(hedef)) return "Arsa sahibine hiçbir işlem yapılamaz.";
+    /** Yönetim reddinin sebebini oyuncuya bildirir. */
+    public void yonetimRed(Player yapan, Arsa arsa, UUID hedef) {
+        if (hedef.equals(yapan.getUniqueId())) {
+            Mesaj.hata(yapan, "uye.red.kendin");
+            return;
+        }
+        if (arsa.sahipMi(hedef)) {
+            Mesaj.hata(yapan, "uye.red.sahip");
+            return;
+        }
         ArsaUye h = arsa.uye(hedef);
         if (yetki().modMu(yapan, arsa) && h != null && h.rutbe() == Rutbe.MOD) {
-            return "MOD'lar diğer MOD'ları yönetemez.";
+            Mesaj.hata(yapan, "uye.red.mod-mod");
+            return;
         }
-        return "Bu işlem için arsa sahibi veya MOD olmalısın.";
-    }
-
-    private void bildir(UUID hedef, String mesaj) {
-        Player p = Bukkit.getPlayer(hedef);
-        if (p != null) Mesaj.gonder(p, mesaj);
+        Mesaj.hata(yapan, "uye.red.genel");
     }
 
     private void kaydet() {

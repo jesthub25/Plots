@@ -3,7 +3,9 @@
 Koordinat tabanlı, kiralamalı ve **izin bazında detaylı** arsa koruma eklentisi.
 Taban sürüm **Minecraft 1.20.1**, üst sürümlerde (1.20.x, 1.21.x) de çalışır. Spigot ve Paper uyumludur.
 
-- Tek komut: `/arsa` (tüm işlemler alt komut + tab tamamlama ile)
+- İki dil: `/arsa` → **Türkçe**, `/plot` → **English**. Oyuncunun son kullandığı komut; GUI'leri, mesajları, koruma uyarılarını ve bildirimleri o dile çevirir (tercih kaydedilir)
+- Tek arsa kuralı: bir oyuncunun adı bir arsada geçiyorsa (sahip/üye) başka arsaya üye olamaz, yetki alamaz, başka arsa kiralayamaz
+- Admin arsa listesi: 54 slotluk sayfalı GUI, filtre, her arsa için sahip / üyeler / rütbeler / tüm izinler detayı, ışınlanma
 - 11 ayrı izin, rütbe varsayılanları + üye başına özel ayar
 - Ziyaretçi (üye olmayan) izinleri: varsayılan **tam koruma**, isteğe göre açılabilir
 - Dolgu camı olmayan, holder tabanlı güvenli GUI
@@ -15,6 +17,27 @@ Taban sürüm **Minecraft 1.20.1**, üst sürümlerde (1.20.x, 1.21.x) de çalı
 1. [Releases](../../releases) sayfasından `GelismisArsa-x.y.z.jar` dosyasını indirip `plugins/` klasörüne at.
 2. İsteğe bağlı: **Vault** + bir ekonomi eklentisi (kiralama için), **WorldEdit** veya **FastAsyncWorldEdit** (seçimden oluşturma ve sıfırlama için).
 3. Sunucuyu başlat. Eski sürüm verisi (`config.yml` içindeki `arsalar` + `kiralama.yml`) otomatik olarak `arsalar.yml` dosyasına taşınır, eski dosyalar `config-eski.yml` / `kiralama-eski.yml` olarak yedeklenir.
+
+## Dil / Language
+
+`/arsa ...` yazan oyuncu Türkçe, `/plot ...` yazan oyuncu İngilizce görür. Tüm metinler `plugins/GelismisArsa/lang/tr.yml` ve `lang/en.yml` içinde düzenlenebilir (`/arsa yenile`). Hiç komut kullanmamış oyuncular için `config.yml → varsayilan-dil` geçerlidir (`otomatik` = oyun istemcisinin dili).
+
+| Türkçe (`/arsa`) | English (`/plot`) |
+|---|---|
+| `kirala <süre>` | `rent <time>` |
+| `terket onayla` | `leave confirm` |
+| `sure <arttır\|azalt> <süre>` | `time <add\|remove> <time>` |
+| `bilgi` / `sahip` / `gui` | `info` / `owner` / `gui` |
+| `yetkiver <oyuncu> [rütbe\|izin\|hepsi]` | `trust <player> [rank\|permission\|all]` |
+| `yetkial <oyuncu> [izin\|hepsi]` | `untrust <player> [permission\|all]` |
+| `ziyaretci [izin\|hepsi] [aç\|kapat]` | `visitor [permission\|all] [on\|off]` |
+| `izinler` / `yardim` | `perms` / `help` |
+| `olustur` / `sil onayla` / `liste` | `create` / `delete confirm` / `list` |
+| `sablon` / `bypass` / `yenile` | `template` / `bypass` / `reload` |
+
+Rütbe anahtarları: `uye, guvenilir, yetkili, mod` / `member, trusted, officer, mod`
+İzin anahtarları: `blokkoy, blokkir, sandik, kapi, mekanizma, etkilesim, esyakullan, varlik, itemtopla, itemat, davet` /
+`place, break, container, door, redstone, interact, useitem, entity, pickup, drop, invite`
 
 ## Komutlar
 
@@ -43,7 +66,7 @@ Arsanın içinde değilsen ve tek bir arsan varsa `gui`, `sure`, `yetkiver`, `ye
 | `/arsa olustur` | WorldEdit seçiminden arsa oluştur |
 | `/arsa olustur <x1> <y1> <z1> <x2> <y2> <z2>` | Koordinatla oluştur (`~` desteklenir) |
 | `/arsa sil onayla` | Bulunduğun arsayı sil |
-| `/arsa liste [sayfa]` | Tüm arsalar (konsoldan da çalışır) |
+| `/arsa liste` | Tüm arsalar: 54 slotluk sayfalı GUI (konsolda sohbet listesi) |
 | `/arsa sablon` | Arsanın şu anki halini sıfırlama şablonu olarak kaydet |
 | `/arsa bypass` | Koruma atlatmayı aç/kapat |
 | `/arsa yenile` | `config.yml` yeniden yükle |

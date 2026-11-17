@@ -4,7 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jestron.gelismisArsa.GelismisArsa;
+import org.jestron.gelismisArsa.dil.Dil;
+import org.jestron.gelismisArsa.dil.L;
 import org.jestron.gelismisArsa.model.Arsa;
 import org.jestron.gelismisArsa.model.ArsaUye;
 import org.jestron.gelismisArsa.model.Izin;
@@ -35,21 +38,14 @@ public final class UyelerMenu extends Menu {
 
     private UyelerMenu(GelismisArsa plugin, Player oyuncu, Arsa arsa, List<UUID> sirali, int istenen) {
         super(plugin, oyuncu, arsa, satirSayisi(sirali.size(), kisit(istenen, sirali.size())),
-                baslik(arsa, kisit(istenen, sirali.size()), sayfaSayisi(sirali.size())));
+                sayfaSayisi(sirali.size()) > 1 ? "menu.uyeler.baslik-sayfa" : "menu.uyeler.baslik",
+                arsa.id(), kisit(istenen, sirali.size()) + 1, sayfaSayisi(sirali.size()));
         this.sayfa = kisit(istenen, sirali.size());
         this.sirali = sirali;
     }
 
-    private static int kisit(int sayfa, int adet) {
-        return Math.max(0, Math.min(sayfa, sayfaSayisi(adet) - 1));
-    }
-
-    private static String baslik(Arsa arsa, int sayfa, int toplam) {
-        return "&8Arsa &7#" + arsa.id() + " &8» &0Üyeler" + (toplam > 1 ? " &8(" + (sayfa + 1) + "/" + toplam + ")" : "");
-    }
-
-    /** Sıra: sahip, sonra rütbe (yüksekten düşüğe), sonra isim. Sahip listede null olmayan ilk eleman. */
-    private static List<UUID> sirala(Arsa arsa) {
+    /** Sıra: sahip, sonra rütbe (yüksekten düşüğe), sonra isim. */
+    static List<UUID> sirala(Arsa arsa) {
         List<UUID> l = new ArrayList<>();
         if (arsa.sahibiVar()) l.add(arsa.sahip());
         List<Map.Entry<UUID, ArsaUye>> uyeler = new ArrayList<>(arsa.uyeler().entrySet());
@@ -59,14 +55,17 @@ public final class UyelerMenu extends Menu {
         return l;
     }
 
+    private static int kisit(int sayfa, int adet) {
+        return Math.max(0, Math.min(sayfa, sayfaSayisi(adet) - 1));
+    }
+
     private static int sayfaSayisi(int adet) {
         return Math.max(1, (adet + SAYFA_BOYUTU - 1) / SAYFA_BOYUTU);
     }
 
     private static int satirSayisi(int adet, int sayfa) {
         int sayfadaki = Math.min(SAYFA_BOYUTU, Math.max(0, adet - sayfa * SAYFA_BOYUTU));
-        int izgara = Math.max(1, (sayfadaki + 8) / 9);
-        return izgara + 1;
+        return Math.max(1, (sayfadaki + 8) / 9) + 1;
     }
 
     @Override
@@ -77,17 +76,15 @@ public final class UyelerMenu extends Menu {
         for (int i = baslangic; i < bitis; i++, slot++) {
             UUID u = sirali.get(i);
             if (arsa.sahipMi(u)) {
-                koy(slot, Ikon.kafa(Bukkit.getOfflinePlayer(u))
-                        .ad("&6&l" + OyuncuBul.isim(u))
-                        .satir("&6★ Arsa Sahibi", "&7Tüm izinlere sahiptir.")
-                        .yap());
+                koy(slot, sahipIkonu(dil, u));
                 continue;
             }
             ArsaUye uye = arsa.uye(u);
             if (uye == null) continue;
-            koy(slot, uyeIkonu(u, uye), t -> {
+            boolean yonetebilir = plugin.yetki().yonetebilir(oyuncu, arsa, u);
+            koy(slot, uyeIkonu(dil, arsa, u, uye, yonetebilir ? "menu.uye.tikla-duzenle" : "menu.uye.yonetemezsin"), tik -> {
                 if (!plugin.yetki().yonetebilir(oyuncu, arsa, u)) {
-                    Mesaj.hata(oyuncu, plugin.uyeServisi().yonetimRedSebebi(oyuncu, arsa, u));
+                    plugin.uyeServisi().yonetimRed(oyuncu, arsa, u);
                     return;
                 }
                 Mesaj.sesSayfa(oyuncu);
@@ -96,90 +93,91 @@ public final class UyelerMenu extends Menu {
         }
 
         int alt = boyut() - 9;
-        koy(alt, Ikon.of(Material.ARROW).ad("&e« Geri").satir("&7Yönetim paneline dön.").yap(), t -> {
+        koy(alt, geriIkonu("menu.geri.panel"), tik -> {
             Mesaj.sesSayfa(oyuncu);
             new AnaMenu(plugin, oyuncu, arsa).ac();
         });
-
         if (sayfa > 0) {
-            koy(alt + 3, Ikon.of(Material.SPECTRAL_ARROW).ad("&e‹ Önceki Sayfa").yap(), t -> {
+            koy(alt + 3, Ikon.of(Material.SPECTRAL_ARROW).ad(t("menu.onceki")).yap(), tik -> {
                 Mesaj.sesSayfa(oyuncu);
                 new UyelerMenu(plugin, oyuncu, arsa, sayfa - 1).ac();
             });
         }
-
         if (plugin.yetki().davetEdebilir(oyuncu, arsa)) {
             koy(alt + 4, Ikon.of(Material.NAME_TAG)
-                    .ad("&a&l+ Üye Davet Et")
-                    .satir("&7Tıkla ve davet etmek istediğin", "&7oyuncunun adını sohbete yaz.")
-                    .bosluk()
-                    .satir("&8Komut: /arsa yetkiver <oyuncu> [rütbe|izin]")
-                    .yap(), t -> davetIste());
+                    .ad(t("menu.uyeler.davet.ad"))
+                    .satirlar(l("menu.uyeler.davet.lore"))
+                    .yap(), tik -> davetIste());
         }
-
         if (bitis < sirali.size()) {
-            koy(alt + 5, Ikon.of(Material.SPECTRAL_ARROW).ad("&eSonraki Sayfa ›").yap(), t -> {
+            koy(alt + 5, Ikon.of(Material.SPECTRAL_ARROW).ad(t("menu.sonraki")).yap(), tik -> {
                 Mesaj.sesSayfa(oyuncu);
                 new UyelerMenu(plugin, oyuncu, arsa, sayfa + 1).ac();
             });
         }
-
-        koy(alt + 8, rehber());
+        koy(alt + 8, rehber(dil));
     }
 
-    private org.bukkit.inventory.ItemStack uyeIkonu(UUID u, ArsaUye uye) {
+    // ── Ortak ikonlar (liste/detay menüleri de kullanır) ────────────────────
+
+    static ItemStack sahipIkonu(Dil dil, UUID u) {
+        return Ikon.kafa(Bukkit.getOfflinePlayer(u))
+                .ad(L.t(dil, "menu.uye.sahip.ad", OyuncuBul.isim(u)))
+                .satirlar(L.l(dil, "menu.uye.sahip.lore"))
+                .yap();
+    }
+
+    /** Üye kafası: rütbe + her iznin durumu. {@code altSatirAnahtari} null ise alt satır eklenmez. */
+    static ItemStack uyeIkonu(Dil dil, Arsa arsa, UUID u, ArsaUye uye, String altSatirAnahtari) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(u);
-        Ikon i = Ikon.kafa(op).ad("&f&l" + OyuncuBul.isim(u))
-                .satir("&7Rütbe: " + uye.rutbe().gorunenAd());
+        Ikon i = Ikon.kafa(op).ad(L.t(dil, "menu.uye.ad", OyuncuBul.isim(u)))
+                .satir(L.t(dil, "menu.uye.rutbe", uye.rutbe().ad(dil)));
         if (uye.rutbe() == Rutbe.MOD) {
-            i.satir("&6Tüm izinlere sahip &8(yönetici)");
+            i.satir(L.t(dil, "menu.uye.mod-tum"));
         } else {
             int acik = 0;
             List<String> satirlar = new ArrayList<>();
             for (Izin iz : Izin.values()) {
                 boolean var = arsa.uyeIzni(uye, iz);
                 if (var) acik++;
-                satirlar.add((var ? "&a✔ " : "&c✘ ") + "&7" + iz.ad() + (uye.ozel(iz) != null ? " &e*" : ""));
+                satirlar.add(L.t(dil, var ? "menu.uye.izin-acik" : "menu.uye.izin-kapali", iz.ad(dil))
+                        + (uye.ozel(iz) != null ? L.t(dil, "menu.uye.ozel-isaret") : ""));
             }
-            i.satir("&7Açık izin: &f" + acik + "&7/&f" + Izin.values().length).bosluk().satirlar(satirlar);
-            if (uye.ozelAyarVar()) i.satir("&e* &8= özel ayar");
+            i.satir(L.t(dil, "menu.uye.acik-sayi", acik, Izin.values().length)).bosluk().satirlar(satirlar);
+            if (uye.ozelAyarVar()) i.satir(L.t(dil, "menu.uye.ozel-aciklama"));
         }
-        i.bosluk();
-        if (plugin.yetki().yonetebilir(oyuncu, arsa, u)) {
-            i.satir("&e▶ Tıkla: rütbe ve izinleri düzenle");
-        } else {
-            i.satir("&8Bu üyeyi yönetemezsin.");
-        }
+        if (altSatirAnahtari != null) i.bosluk().satir(L.t(dil, altSatirAnahtari));
         return i.yap();
     }
 
-    private org.bukkit.inventory.ItemStack rehber() {
-        Ikon i = Ikon.of(Material.BOOK).ad("&6&lRütbe Rehberi");
+    static ItemStack rehber(Dil dil) {
+        Ikon i = Ikon.of(Material.BOOK).ad(L.t(dil, "menu.rehber.ad"));
         for (Rutbe r : Rutbe.values()) {
-            i.bosluk().satir(r.gorunenAd());
+            i.bosluk().satir(r.ad(dil));
             if (r == Rutbe.MOD) {
-                i.satir("&8• Tüm izinler + üye yönetimi", "&8• Sahibe ve MOD'lara dokunamaz", "&8• MOD rütbesi veremez");
+                i.satirlar(L.l(dil, "menu.rehber.mod"));
             } else if (r.varsayilanlar().isEmpty()) {
-                i.satir("&8• Sadece arsaya girebilir");
+                i.satir(L.t(dil, "menu.rehber.sadece-giris"));
             } else {
                 List<String> adlar = new ArrayList<>();
-                for (Izin iz : r.varsayilanlar()) adlar.add(iz.ad());
+                for (Izin iz : r.varsayilanlar()) adlar.add(iz.ad(dil));
                 for (int k = 0; k < adlar.size(); k += 2) {
-                    i.satir("&8• " + String.join("&8, ", adlar.subList(k, Math.min(adlar.size(), k + 2))));
+                    i.satir(L.t(dil, "menu.rehber.madde",
+                            String.join(", ", adlar.subList(k, Math.min(adlar.size(), k + 2)))));
                 }
             }
         }
-        i.bosluk().satir("&8Rütbe değişince özel izin ayarları sıfırlanır.");
+        i.bosluk().satir(L.t(dil, "menu.rehber.not"));
         return i.yap();
     }
 
     private void davetIste() {
         oyuncu.closeInventory();
-        plugin.sohbet().iste(oyuncu, "&aDavet etmek istediğin oyuncunun adını sohbete yaz.", ad -> {
+        plugin.sohbet().iste(oyuncu, "menu.uyeler.davet.soru", ad -> {
             if (!plugin.arsalar().kayitli(arsa)) return;
             OfflinePlayer hedef = OyuncuBul.bul(ad);
             if (hedef == null) {
-                Mesaj.hata(oyuncu, "'" + ad + "' adında bir oyuncu bulunamadı.");
+                Mesaj.hata(oyuncu, "genel.oyuncu-yok", ad);
             } else {
                 plugin.uyeServisi().davet(oyuncu, arsa, hedef);
             }

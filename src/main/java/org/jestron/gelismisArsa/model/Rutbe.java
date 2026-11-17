@@ -1,6 +1,8 @@
 package org.jestron.gelismisArsa.model;
 
 import org.bukkit.Material;
+import org.jestron.gelismisArsa.dil.Dil;
+import org.jestron.gelismisArsa.dil.L;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -11,24 +13,25 @@ import java.util.Set;
  * Arsa üye rütbeleri (düşükten yükseğe).
  * MOD her zaman tüm izinlere sahiptir ve arsa sahibi gibi üyeleri yönetebilir;
  * ancak arsa sahibine ve diğer MOD'lara dokunamaz, kimseye MOD rütbesi veremez.
+ * Görünen ad dil dosyasındadır: rutbe.&lt;ENUM&gt;
  */
 public enum Rutbe {
 
-    UYE(1, "uye", "§7Üye", Material.LEATHER_HELMET),
-    GUVENILIR_UYE(2, "guvenilir", "§aGüvenilir Üye", Material.IRON_HELMET),
-    YETKILI(3, "yetkili", "§bYetkili", Material.DIAMOND_HELMET),
-    MOD(4, "mod", "§6Mod", Material.GOLDEN_HELMET);
+    UYE(1, "uye", "member", Material.LEATHER_HELMET),
+    GUVENILIR_UYE(2, "guvenilir", "trusted", Material.IRON_HELMET),
+    YETKILI(3, "yetkili", "officer", Material.DIAMOND_HELMET),
+    MOD(4, "mod", "mod", Material.GOLDEN_HELMET);
 
     private final int seviye;
-    private final String anahtar;
-    private final String gorunenAd;
+    private final String anahtarTr;
+    private final String anahtarEn;
     private final Material ikon;
     private final EnumSet<Izin> varsayilan = EnumSet.noneOf(Izin.class);
 
-    Rutbe(int seviye, String anahtar, String gorunenAd, Material ikon) {
+    Rutbe(int seviye, String anahtarTr, String anahtarEn, Material ikon) {
         this.seviye = seviye;
-        this.anahtar = anahtar;
-        this.gorunenAd = gorunenAd;
+        this.anahtarTr = anahtarTr;
+        this.anahtarEn = anahtarEn;
         this.ikon = ikon;
     }
 
@@ -51,7 +54,7 @@ public enum Rutbe {
     }
 
     public void varsayilanAyarla(Collection<Izin> izinler) {
-        if (this == MOD) return; // MOD her zaman tam yetkilidir
+        if (this == MOD) return;
         varsayilan.clear();
         varsayilan.addAll(izinler);
     }
@@ -65,8 +68,8 @@ public enum Rutbe {
     }
 
     public int seviye() { return seviye; }
-    public String anahtar() { return anahtar; }
-    public String gorunenAd() { return gorunenAd; }
+    public String anahtar(Dil dil) { return dil == Dil.EN ? anahtarEn : anahtarTr; }
+    public String ad(Dil dil) { return L.t(dil, "rutbe." + name()); }
     public Material ikon() { return ikon; }
 
     public Rutbe sonraki() {
@@ -81,10 +84,13 @@ public enum Rutbe {
         if (girdi == null) return null;
         String g = Izin.normalize(girdi);
         for (Rutbe r : values()) {
-            if (r.anahtar.equals(g) || Izin.normalize(r.name()).equals(g)) return r;
+            if (r.anahtarTr.equals(g) || r.anahtarEn.equals(g) || Izin.normalize(r.name()).equals(g)) return r;
         }
-        if (g.equals("guveniliruye") || g.equals("guvenli")) return GUVENILIR_UYE;
-        if (g.equals("moderator")) return MOD;
-        return null;
+        switch (g) {
+            case "guveniliruye": case "guvenli": return GUVENILIR_UYE;
+            case "moderator": return MOD;
+            case "manager": return YETKILI;
+            default: return null;
+        }
     }
 }

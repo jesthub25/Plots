@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jestron.gelismisArsa.Ayarlar;
 import org.jestron.gelismisArsa.GelismisArsa;
+import org.jestron.gelismisArsa.dil.Dil;
 import org.jestron.gelismisArsa.entegrasyon.Ekonomi;
 import org.jestron.gelismisArsa.entegrasyon.WorldEditKopru;
 import org.jestron.gelismisArsa.model.Arsa;
@@ -17,6 +18,7 @@ import org.jestron.gelismisArsa.util.Sure;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -44,16 +46,16 @@ public final class KiraServisi implements Listener {
     }
 
     public String bicim(double miktar) {
-        return ekonomi != null ? ekonomi.bicim(miktar) : String.format("%.2f", miktar);
+        return ekonomi != null ? ekonomi.bicim(miktar) : String.format(Locale.ROOT, "%,.2f", miktar);
     }
 
     private boolean ekonomiHazir(Player p) {
         if (!ayar().kiralamaAktif) {
-            Mesaj.hata(p, "Kiralama sistemi şu anda kapalı.");
+            Mesaj.hata(p, "kira.kapali");
             return false;
         }
         if (ekonomi == null || !ekonomi.hazir()) {
-            Mesaj.hata(p, "Ekonomi sistemi bulunamadı (Vault + ekonomi eklentisi gerekli).");
+            Mesaj.hata(p, "kira.ekonomi-yok");
             return false;
         }
         return true;
@@ -67,22 +69,30 @@ public final class KiraServisi implements Listener {
 
     public boolean kirala(Player p, Arsa arsa, long saniye) {
         if (!ekonomiHazir(p)) return false;
+        Dil d = Mesaj.dil(p);
         if (arsa.sahibiVar()) {
-            Mesaj.hata(p, "Bu arsanın zaten bir sahibi var.");
+            Mesaj.hata(p, "kira.zaten-sahipli");
             return false;
         }
         if (saniye < 86400L || saniye > maxSaniye()) {
-            Mesaj.hata(p, "Kiralama süresi en az 1 gün, en fazla " + ayar().maxHafta + " hafta olabilir.");
+            Mesaj.hata(p, "kira.sure-sinir", ayar().maxHafta);
             return false;
+        }
+        if (ayar().tekArsaKurali) {
+            Arsa diger = plugin.arsalar().iliskiliArsa(p.getUniqueId(), null);
+            if (diger != null) {
+                Mesaj.hata(p, "kira.baska-arsada", diger.id());
+                return false;
+            }
         }
         int limit = ayar().oyuncuBasiMaxArsa;
         if (limit > 0 && plugin.arsalar().sahipArsalari(p.getUniqueId()).size() >= limit) {
-            Mesaj.hata(p, "En fazla " + limit + " arsa kiralayabilirsin.");
+            Mesaj.hata(p, "kira.limit", limit);
             return false;
         }
         double tutar = ucret(saniye);
         if (!ekonomi.cek(p, tutar)) {
-            Mesaj.hata(p, "Yeterli paran yok! Gerekli: &f" + bicim(tutar));
+            Mesaj.hata(p, "kira.para-yok", bicim(tutar));
             return false;
         }
         // Arsanın kiralanmadan önceki hali şablon olarak saklanır (yoksa)
@@ -96,45 +106,43 @@ public final class KiraServisi implements Listener {
         for (Izin i : ayar().ziyaretciVarsayilan) arsa.ziyaretciAyarla(i, true);
         plugin.depo().kaydetPlanla();
 
-        Mesaj.basari(p, "Tebrikler! &f#" + arsa.id() + " &anumaralı arsayı &f" + Sure.saniyeYaz(saniye)
-                + " &asüreyle &f" + bicim(tutar) + " &akarşılığında kiraladın.");
-        Mesaj.bilgi(p, "Bitiş: &f" + Sure.tarih(arsa.kiraBitis()) + " &8• &7Yönetim: &f/arsa gui");
+        Mesaj.basari(p, "kira.kiralandi", arsa.id(), Sure.saniyeYaz(d, saniye), bicim(tutar));
+        Mesaj.bilgi(p, "kira.kiralandi-bilgi", Sure.tarih(arsa.kiraBitis()));
         return true;
     }
 
     public boolean uzat(Player p, Arsa arsa, long saniye) {
         if (!sahipKontrol(p, arsa) || !ekonomiHazir(p)) return false;
+        Dil d = Mesaj.dil(p);
         long yeniKalan = arsa.kalanMs() / 1000L + saniye;
         if (yeniKalan > maxSaniye()) {
-            Mesaj.hata(p, "Kalan süre en fazla " + ayar().maxHafta + " hafta olabilir. Şu an kalan: &f"
-                    + Sure.yaz(arsa.kalanMs()));
+            Mesaj.hata(p, "kira.max-kalan", ayar().maxHafta, Sure.yaz(d, arsa.kalanMs()));
             return false;
         }
         double tutar = ucret(saniye);
         if (!ekonomi.cek(p, tutar)) {
-            Mesaj.hata(p, "Yeterli paran yok! Gerekli: &f" + bicim(tutar));
+            Mesaj.hata(p, "kira.para-yok", bicim(tutar));
             return false;
         }
         arsa.kiraBitisAyarla(Math.max(arsa.kiraBitis(), System.currentTimeMillis()) + saniye * 1000L);
         plugin.depo().kaydetPlanla();
-        Mesaj.basari(p, "Kira süresi &f" + Sure.saniyeYaz(saniye) + " &auzatıldı (&f" + bicim(tutar)
-                + "&a). Yeni bitiş: &f" + Sure.tarih(arsa.kiraBitis()));
+        Mesaj.basari(p, "kira.uzatildi", Sure.saniyeYaz(d, saniye), bicim(tutar), Sure.tarih(arsa.kiraBitis()));
         return true;
     }
 
     public boolean kisalt(Player p, Arsa arsa, long saniye) {
         if (!sahipKontrol(p, arsa) || !ekonomiHazir(p)) return false;
+        Dil d = Mesaj.dil(p);
         long kalan = arsa.kalanMs() / 1000L;
         if (kalan - saniye < MIN_KALAN_SANIYE) {
-            Mesaj.hata(p, "En az 1 saat süre kalmalı. Arsayı bırakmak için: &f/arsa terket");
+            Mesaj.hata(p, "kira.min-kalan");
             return false;
         }
         double iade = saniye * iadeOrani(arsa);
         arsa.kiraBitisAyarla(arsa.kiraBitis() - saniye * 1000L);
         ekonomi.yatir(p, iade);
         plugin.depo().kaydetPlanla();
-        Mesaj.basari(p, "Kira süresi &f" + Sure.saniyeYaz(saniye) + " &akısaltıldı, &f" + bicim(iade)
-                + " &aiade edildi. Yeni bitiş: &f" + Sure.tarih(arsa.kiraBitis()));
+        Mesaj.basari(p, "kira.kisaltildi", Sure.saniyeYaz(d, saniye), bicim(iade), Sure.tarih(arsa.kiraBitis()));
         return true;
     }
 
@@ -145,23 +153,21 @@ public final class KiraServisi implements Listener {
 
     public boolean terket(Player p, Arsa arsa) {
         if (!arsa.sahipMi(p.getUniqueId())) {
-            Mesaj.hata(p, "Bu arsanın sahibi sen değilsin.");
+            Mesaj.hata(p, "kira.sahip-degil");
             return false;
         }
         double iade = arsa.kiralik() ? terkIadesi(arsa) : 0D;
         if (iade > 0 && ekonomi != null && ekonomi.hazir()) {
             ekonomi.yatir(p, iade);
-            Mesaj.basari(p, "Arsayı terk ettin. Hesabına &f" + bicim(iade) + " &aiade edildi.");
+            Mesaj.basari(p, "kira.terk-iade", bicim(iade));
         } else {
-            Mesaj.basari(p, "Arsayı terk ettin.");
+            Mesaj.basari(p, "kira.terk");
         }
         bitir(arsa, true, false);
         return true;
     }
 
-    /**
-     * Kirayı bitirir: arsa sahipsiz olur, üyeler ve izinler silinir, ayara göre sıfırlanır.
-     */
+    /** Kirayı bitirir: arsa sahipsiz olur, üyeler ve izinler silinir, ayara göre sıfırlanır. */
     public void bitir(Arsa arsa, boolean sifirla, boolean sureDoldu) {
         UUID eskiSahip = arsa.sahip();
         arsa.sahipsizYap();
@@ -169,24 +175,22 @@ public final class KiraServisi implements Listener {
         if (sifirla && ayar().bitinceSifirla) sifirla(arsa);
         if (sureDoldu && eskiSahip != null) {
             Player p = Bukkit.getPlayer(eskiSahip);
-            if (p != null) Mesaj.hata(p, "&f#" + arsa.id() + " &cnumaralı arsanın kira süresi doldu, arsa boşaltıldı.");
+            if (p != null) Mesaj.hata(p, "kira.sure-doldu", arsa.id());
         }
     }
 
     public void sifirla(Arsa arsa) {
         WorldEditKopru we = plugin.worldEdit();
         if (we == null) {
-            plugin.getLogger().warning("#" + arsa.id() + " sıfırlanamadı: WorldEdit yüklü değil.");
+            plugin.getLogger().warning("#" + arsa.id() + " sifirlanamadi: WorldEdit yuklu degil.");
             return;
         }
         File sablon = sablonDosyasi(arsa);
-        if (sablon.exists()) {
-            if (we.sablonYukle(arsa, sablon)) return;
-        }
+        if (sablon.exists() && we.sablonYukle(arsa, sablon)) return;
         if (ayar().sablonYoksaHavayaCevir) {
             we.havayaCevir(arsa);
         } else {
-            plugin.getLogger().info("#" + arsa.id() + " için şablon yok, sıfırlama atlandı (/arsa sablon ile oluşturabilirsin).");
+            plugin.getLogger().info("#" + arsa.id() + " icin sablon yok, sifirlama atlandi (/arsa sablon).");
         }
     }
 
@@ -207,7 +211,7 @@ public final class KiraServisi implements Listener {
             if (a.kiralik() && a.kiraBitis() <= simdi) biten.add(a);
         }
         for (Arsa a : biten) {
-            plugin.getLogger().info("#" + a.id() + " arsasının kira süresi doldu, boşaltılıyor.");
+            plugin.getLogger().info("#" + a.id() + " kira suresi doldu, bosaltiliyor.");
             bitir(a, true, true);
         }
     }
@@ -220,10 +224,10 @@ public final class KiraServisi implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             Player p = Bukkit.getPlayer(u);
             if (p == null) return;
+            Dil d = Mesaj.dil(p);
             for (Arsa a : plugin.arsalar().sahipArsalari(u)) {
                 if (a.kiralik() && a.kalanMs() < saat * 3600_000L) {
-                    Mesaj.gonder(p, "&e⚠ &f#" + a.id() + " &enumaralı arsanın kirası &f" + Sure.yaz(a.kalanMs())
-                            + " &esonra bitiyor. Uzatmak için: &f/arsa sure arttır 1w");
+                    Mesaj.gonder(p, "kira.hatirlatma", a.id(), Sure.yaz(d, a.kalanMs()));
                 }
             }
         }, 60L);
@@ -233,11 +237,11 @@ public final class KiraServisi implements Listener {
 
     private boolean sahipKontrol(Player p, Arsa arsa) {
         if (!arsa.kiralik()) {
-            Mesaj.hata(p, "Bu arsa kiralık değil.");
+            Mesaj.hata(p, "kira.kiralik-degil");
             return false;
         }
         if (!arsa.sahipMi(p.getUniqueId())) {
-            Mesaj.hata(p, "Kira süresini sadece arsanın kiracısı değiştirebilir.");
+            Mesaj.hata(p, "kira.sadece-kiraci");
             return false;
         }
         return true;

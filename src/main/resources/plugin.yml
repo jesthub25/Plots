@@ -4,13 +4,16 @@ main: org.jestron.gelismisArsa.GelismisArsa
 api-version: '1.20'
 author: Jestron
 website: https://github.com/jesthub25/Plots
-description: Koordinat tabanli, kiralamali, detayli izin sistemli arsa eklentisi (1.20.1+).
+description: Koordinat tabanli, kiralamali, detayli izin sistemli, iki dilli (TR/EN) arsa eklentisi (1.20.1+).
 softdepend: [Vault, WorldEdit, FastAsyncWorldEdit]
 
 commands:
   arsa:
-    description: GelismisArsa ana komutu. Tum islemler bu komut uzerinden yapilir.
-    usage: /arsa <kirala|terket|sure|bilgi|sahip|gui|yetkiver|yetkial|ziyaretci|izinler>
+    description: GelismisArsa ana komutu (Turkce). Tum islemler bu komut uzerinden yapilir.
+    usage: /arsa <kirala|terket|sure|bilgi|sahip|gui|yetkiver|yetkial|ziyaretci|izinler|yardim>
+  plot:
+    description: GelismisArsa main command (English). All actions run through this command.
+    usage: /plot <rent|leave|time|info|owner|gui|trust|untrust|visitor|perms|help>
 
 permissions:
   gelismisarsa.oyuncu:

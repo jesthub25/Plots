@@ -1,0 +1,475 @@
+# GelismisArsa - English language file (/plot)
+# Uses & color codes and {0}, {1}... placeholders.
+# Missing keys fall back to the defaults inside the jar. After editing: /plot reload
+
+onek: '&6&lPlot &8» &7'
+genel:
+  arsada-degilsin: 'You are not inside a plot.'
+  arsada-durmalisin: 'You must stand inside a plot.'
+  birden-fazla-arsa: 'You belong to more than one plot; stand inside the plot you want to manage.'
+  oyuncu-yok: 'No player named ''&f{0}&c'' was found.'
+  oyuncu-yok-detay: 'No player named ''&f{0}&c'' was found (they must have joined the server at least once).'
+  sadece-oyuncu: 'This command can only be used by players.'
+  sahipsiz: 'Unclaimed'
+  yetki-yok: 'You do not have permission to use this command.'
+izin:
+  BLOK_KOY:
+    ad: 'Place Blocks'
+    aciklama:
+      - 'Can place blocks, edit signs, empty'
+      - 'buckets and hang decorations.'
+  BLOK_KIR:
+    ad: 'Break Blocks'
+    aciklama:
+      - 'Can break blocks, fill buckets,'
+      - 'trample farmland and put out fire.'
+  SANDIK:
+    ad: 'Open Containers'
+    aciklama:
+      - 'Can open chests, barrels, shulkers,'
+      - 'furnaces, hoppers, dispensers, etc.'
+  KAPI:
+    ad: 'Doors / Trapdoors / Gates'
+    aciklama:
+      - 'Can open and close every kind of'
+      - 'door, trapdoor and fence gate.'
+  MEKANIZMA:
+    ad: 'Buttons / Levers / Plates'
+    aciklama:
+      - 'Buttons, levers, pressure plates, tripwire,'
+      - 'repeaters, note blocks, bells, etc.'
+  ETKILESIM:
+    ad: 'Stations / Block Interaction'
+    aciklama:
+      - 'Crafting table, anvil, enchanting table,'
+      - 'beds, flower pots, cauldrons, campfires, etc.'
+  ESYA_KULLAN:
+    ad: 'Use Items'
+    aciklama:
+      - 'Flint and steel, bone meal, axe/hoe/shovel,'
+      - 'spawn eggs, dyes, brushes, etc.'
+  VARLIK:
+    ad: 'Animals / Entities'
+    aciklama:
+      - 'Animals, villagers, armor stands,'
+      - 'item frames, paintings and vehicles.'
+  ITEM_TOPLA:
+    ad: 'Pick Up Items'
+    aciklama:
+      - 'Can pick up items dropped'
+      - 'on the ground inside the plot.'
+  ITEM_AT:
+    ad: 'Drop Items'
+    aciklama:
+      - 'Can drop items while'
+      - 'inside the plot.'
+  DAVET:
+    ad: 'Invite Members'
+    aciklama:
+      - 'Can invite new members to the plot.'
+      - 'Invited players join with the Member rank.'
+rutbe:
+  UYE: '&7Member'
+  GUVENILIR_UYE: '&aTrusted'
+  YETKILI: '&bOfficer'
+  MOD: '&6Mod'
+sure:
+  az: 'under 1m'
+  dakika: 'm'
+  saat: 'h'
+  gun: 'd'
+  doldu: 'expired'
+koruma:
+  red: '&cYou do not have &f{0} &cpermission in this plot.'
+  red-aksiyon: '&c✘ No permission: {0}'
+sohbet:
+  iptal-ipucu: '&8(Type &7cancel &8to abort • 30 seconds)'
+  iptal: 'Cancelled.'
+kira:
+  kapali: 'Plot renting is currently disabled.'
+  ekonomi-yok: 'No economy found (Vault + an economy plugin are required).'
+  zaten-sahipli: 'This plot already has an owner.'
+  sure-sinir: 'Rent time must be between 1 day and {0} weeks.'
+  baska-arsada: 'You already belong to plot &f#{0} &c(owner or member). Because of the one-plot rule you cannot rent another plot.'
+  limit: 'You can rent at most {0} plot(s).'
+  para-yok: 'Not enough money! Required: &f{0}'
+  kiralandi: 'Congratulations! You rented plot &f#{0} &afor &f{1} &afor &f{2}&a.'
+  kiralandi-bilgi: 'Ends: &f{0} &8• &7Management panel: &f/plot gui'
+  max-kalan: 'Remaining time can be at most {0} weeks. Currently left: &f{1}'
+  uzatildi: 'Rent extended by &f{0} &a(&f{1}&a). New end: &f{2}'
+  min-kalan: 'At least 1 hour must remain. To leave the plot: &f/plot leave'
+  kisaltildi: 'Rent shortened by &f{0}&a, &f{1} &arefunded. New end: &f{2}'
+  sahip-degil: 'You are not the owner of this plot.'
+  terk-iade: 'You left the plot. &f{0} &awas refunded to you.'
+  terk: 'You left the plot.'
+  sure-doldu: 'The rent of plot &f#{0} &cexpired and the plot was cleared.'
+  hatirlatma: '&e⚠ The rent of plot &f#{0} &eends in &f{1}&e. To extend: &f/plot time add 1w'
+  kiralik-degil: 'This plot is not rented.'
+  sadece-kiraci: 'Only the tenant can change the rent time.'
+uye:
+  baska-arsada: '&f{0} &calready belongs to plot &f#{1}&c. One-plot rule: a player can only belong to one plot.'
+  sahipsiz-arsa: 'Members cannot be added to an unclaimed plot.'
+  davet-yetkisi-yok: 'You are not allowed to invite members to this plot.'
+  kendini-davet: 'You cannot invite yourself.'
+  zaten-sahip: '&f{0} &cis already the owner of this plot.'
+  zaten-uye: '&f{0} &cis already a member ({1}&c).'
+  davet-basari: '&f{0} &awas added to the plot as {1}&a.'
+  davet-bildirim: '&a{0} added you to plot &f#{1} &aas a member.'
+  uye-degil: '&f{0} &cis not a member of this plot.'
+  atildi: '&f{0} &awas removed from the plot.'
+  atildi-bildirim: '&c{0} removed you from plot &f#{1}&c.'
+  sahip-rutbe: 'The plot owner''s rank cannot be changed.'
+  mod-sadece-sahip: 'Only the plot owner can give the Mod rank.'
+  zaten-rutbe: '&f{0} &cis already {1}&c.'
+  eklendi-rutbe: '&f{0} &awas added to the plot with rank {1}'
+  rutbe-guncellendi: '&f{0}&a''s rank was updated: {1}'
+  rutbe-bildirim: '&aYour rank in plot #{0} is now: {1}'
+  en-yuksek: 'This member already has the highest rank.'
+  en-dusuk: 'This member already has the lowest rank.'
+  sahip-tum-izinler: 'The plot owner already has every permission.'
+  otomatik-eklendi: '&f{0} &7was added to the plot as {1}&7.'
+  mod-tum-izinler: 'The Mod rank has every permission. Demote them first.'
+  izin-acildi: '&f{1} &apermission &2ENABLED &afor &f{0}&a.'
+  izin-kapandi: '&f{1} &apermission &cDISABLED &afor &f{0}&a.'
+  varsayilana-dondu: '&f{0}&a''s permissions were reset to the rank defaults.'
+  tum-acildi: '&aAll permissions &2ENABLED &afor &f{0}&a.'
+  tum-kapandi: '&aAll permissions &cDISABLED &afor &f{0}&a.'
+  red:
+    kendin: 'You cannot change your own permissions.'
+    sahip: 'No action can be taken on the plot owner.'
+    mod-mod: 'Mods cannot manage other Mods.'
+    genel: 'You must be the plot owner or a Mod to do this.'
+ziyaretci:
+  yetki-yok: 'Only the plot owner and Mods can change visitor permissions.'
+  verilemez: '{0} cannot be given to visitors.'
+  acildi: '&f{0} &apermission &2ENABLED &afor visitors.'
+  kapandi: '&f{0} &apermission &cDISABLED &afor visitors.'
+  tum-acildi: 'All visitor permissions &2ENABLED&a.'
+  tum-kapandi: 'All visitor permissions &cDISABLED&a.'
+komut:
+  kirala:
+    arsada-degil: 'You must stand inside a plot to rent it.'
+    kullanim: 'Usage: &f/plot rent <time> &8(e.g. 1w, 2w, 3d)'
+    ucret: 'Weekly price: &f{0} &8• &7Maximum: &f{1} weeks'
+    gecersiz: 'Invalid time. Example: &f1w &c(1 week), &f3d &c(3 days)'
+  terket:
+    arsada-degil: 'You must stand inside your own plot to leave it.'
+    uyari: '&e⚠ You are about to leave plot &f#{0}&e.'
+    iade: '&7  Refund amount: &f{0}'
+    sifirlanir: '&7  All members are removed and the plot is reset.'
+    uyeler: '&7  All members are removed.'
+    onayla: '&7  To confirm: &f/{0} leave confirm'
+  sure:
+    kullanim: 'Usage: &f/plot time <add|remove> <time> &8(e.g. 1w, 2d, 12h)'
+    gecersiz: 'Invalid time. Example: &f1w&c, &f2d&c, &f12h'
+    gecersiz-islem: 'Invalid action. Use &fadd &cor &fremove&c.'
+  bilgi:
+    baslik: '&8&m          &r &6&lPlot #{0} &8&m          '
+    boyut: '&7World: &f{0} &8• &7Size: &f{1} &8(height {2})'
+    konum: '&7Location: &f{0}'
+    sahipsiz: '&7Status: &aUnclaimed &8• &7To rent: &f/plot rent <time>'
+    ucret: '&7Weekly price: &f{0}'
+    sahip: '&7Owner: &f{0}'
+    kira: '&7Rent ends: &f{0} &8({1})'
+    uye-yok: '&7Members: &8none'
+    uye-oge: '&f{0} &8({1}&8)'
+    ayrac: '&7, '
+    uyeler: '&7Members: {0}'
+    ziyaretci-yok: '&7Visitor permissions: &8none (full protection)'
+    ziyaretci: '&7Visitor permissions: &f{0}'
+    benim-yok: '&7Your permissions: &cnone'
+    benim: '&7Your permissions: &a{0}'
+  sahip:
+    sahip: '&7Owner of plot &f#{0}&7: &f{1}'
+    sahipsiz: 'This plot is unclaimed. To rent it: &f/plot rent <time>'
+  gui:
+    yetki-yok: 'Only the plot owner and Mods can open the management panel.'
+  yetkiver:
+    kullanim: 'Usage: &f/plot trust <player> [rank|permission|all]'
+    gecersiz: '''&f{0}&c'' is not a valid rank or permission.'
+  liste-rutbe-izin: 'Ranks: &f{0} &8• &7Permissions: &f/plot perms'
+  yetkial:
+    kullanim: 'Usage: &f/plot untrust <player> [permission|all]'
+  izin-gecersiz: '''&f{0}&c'' is not a valid permission. Permissions: &f{1}'
+  izinler:
+    baslik: '&8&m        &r &6&lPlot Permissions &8&m        '
+    satir: '&e{0} &8- &f{1} &8» &7{2}'
+    rutbeler: '&6Ranks: &f{0}'
+    ipucu:
+      - '&7Give: &f/plot trust <player> <permission|rank|all>'
+      - '&7Take: &f/plot untrust <player> <permission|all> &8(without a permission it removes them)'
+  ziyaretci:
+    kullanim: 'Usage: &f/plot visitor <permission|all> <on|off>'
+  olustur:
+    koordinat: 'Coordinates must be whole numbers (or use ~).'
+    kullanim-koordinat: 'Usage: &f/plot create <x1> <y1> <z1> <x2> <y2> <z2>'
+    secim-yok: 'Select a region with WorldEdit first (//wand) or enter coordinates.'
+    kullanim: 'Usage: &f/plot create &8(WorldEdit selection) &cor &f/plot create <x1> <y1> <z1> <x2> <y2> <z2>'
+    cakisma: 'This region overlaps plot &f#{0}&c.'
+    basari: 'Plot &f#{0} &awas created &8({1})'
+    basari-sablon: 'Plot &f#{0} &awas created &8({1}) &7• template saved'
+  sil:
+    arsada-degil: 'You must stand inside the plot you want to delete.'
+    uyari-sahipli: '&e⚠ Plot &f#{0} &e(owner: &f{1}&e) will be permanently deleted.'
+    uyari: '&e⚠ Plot &f#{0} &ewill be permanently deleted.'
+    onayla: '&7  To confirm: &f/{0} delete confirm'
+    basari: 'Plot &f#{0} &awas deleted.'
+    bildirim: 'Your plot &f#{0} &cwas deleted by staff.'
+  liste:
+    bos: 'There are no plots.'
+    gecersiz-sayfa: 'Invalid page number.'
+    baslik: '&8&m      &r &6&lPlots &8({0}/{1}) &8&m      '
+    satir: '&e#{0} &8» &f{1} &8• &7{2} &8{3} &8• &7{4} members'
+    sonraki: '&7Next page: &f/{0} {1} {2}'
+  bypass:
+    acik: 'Protection bypass &2ON&a. You can do anything in every plot.'
+    kapali: 'Protection bypass &cOFF&a. Plot protection applies to you as well.'
+  sablon:
+    we-yok: 'WorldEdit is required for this feature.'
+    arsada-degil: 'You must stand inside the plot whose template you want to save.'
+    basari: 'The current state of plot &f#{0} &awas saved as its reset template.'
+    hata: 'The template could not be saved, check the console.'
+  yenile:
+    basari: 'config.yml and language files reloaded.'
+yardim:
+  oyuncu:
+    - '&8&m          &r &6&lGelismisArsa &8&m          '
+    - '&e/plot rent <time> &8» &7Rent the unclaimed plot you are in'
+    - '&e/plot leave &8» &7Leave your plot, remaining time is refunded'
+    - '&e/plot time <add|remove> <time> &8» &7Manage rent time'
+    - '&e/plot info &8» &7Plot info and your permissions'
+    - '&e/plot owner &8» &7Owner of the plot'
+    - '&e/plot gui &8» &7Management panel (owner and Mods)'
+    - '&e/plot trust <player> [rank|permission|all] &8» &7Invite / give permission'
+    - '&e/plot untrust <player> [permission|all] &8» &7Take permission / remove'
+    - '&e/plot visitor [permission] [on|off] &8» &7Visitor permissions'
+    - '&e/plot perms &8» &7List of all permissions'
+    - '&8Türkçe: &7/arsa yardim'
+  admin:
+    - '&c/plot create [x1 y1 z1 x2 y2 z2] &8» &7Create a plot (empty = WorldEdit selection)'
+    - '&c/plot delete confirm &8» &7Delete the plot you are in'
+    - '&c/plot list &8» &7All plots (GUI)'
+    - '&c/plot template &8» &7Save the reset template of the plot'
+    - '&c/plot bypass &8» &7Toggle protection bypass'
+    - '&c/plot reload &8» &7Reload config.yml and language files'
+menu:
+  acamazsin: 'You are not allowed to open this menu.'
+  yetki-kalmadi: 'You no longer have permission for this.'
+  kapat: '&c&lClose'
+  geri-ad: '&e« Back'
+  geri:
+    panel: '&7Return to the management panel.'
+    uyeler: '&7Return to the member list.'
+    liste: '&7Return to the plot list.'
+  onceki: '&e‹ Previous Page'
+  sonraki: '&eNext Page ›'
+  tumunu-ac: '&a&lEnable All'
+  tumunu-kapat: '&c&lDisable All'
+  ana:
+    baslik: '&8Plot &7#{0} &8» &0Management'
+    bilgi:
+      ad: '&e&lPlot #{0}'
+      lore:
+        - '&7World: &f{0}'
+        - '&7Size: &f{1} &8(height {2})'
+        - '&7Location: &f{3}'
+        - ''
+        - '&7Owner: &f{4}'
+        - '&7Members: &f{5}'
+      kira:
+        - '&7Rent ends: &f{0}'
+        - '&7Remaining: &f{1}'
+    uyeler:
+      ad: '&b&lMembers'
+      lore:
+        - '&7View plot members, edit their'
+        - '&7ranks and permissions one by one,'
+        - '&7invite new members.'
+        - ''
+        - '&7Members: &f{0}'
+        - ''
+        - '&e▶ Click'
+    ziyaretci:
+      ad: '&a&lVisitor Permissions'
+      hicbiri: '&cNone &8(full protection)'
+      sayi: '&f{0}&7/&f{1}'
+      lore:
+        - '&7Decide what non-members are'
+        - '&7allowed to do in your plot.'
+        - ''
+        - '&7Enabled: {0}'
+        - ''
+        - '&e▶ Click'
+    kira:
+      ad: '&6&lRent Time'
+      kiralik-degil: '&7This plot is not rented.'
+      durum:
+        - '&7Remaining: &f{0}'
+        - '&7Ends: &f{1}'
+      uzat:
+        - ''
+        - '&eLeft Click &8» &7extend +1 day &8(&f{0}&8)'
+        - '&eRight Click &8» &7extend +1 week &8(&f{1}&8)'
+        - ''
+        - '&8Shorten / leave: /plot time remove, /plot leave'
+      sadece-kiraci:
+        - ''
+        - '&8Only the tenant can extend the time.'
+  uyeler:
+    baslik: '&8Plot &7#{0} &8» &0Members'
+    baslik-sayfa: '&8Plot &7#{0} &8» &0Members &8({1}/{2})'
+    davet:
+      ad: '&a&l+ Invite Member'
+      lore:
+        - '&7Click and type the name of the'
+        - '&7player you want to invite in chat.'
+        - ''
+        - '&8Command: /plot trust <player> [rank|permission]'
+      soru: '&aType the name of the player you want to invite in chat.'
+  uye:
+    sahip:
+      ad: '&6&l{0}'
+      lore:
+        - '&6★ Plot Owner'
+        - '&7Has every permission.'
+    ad: '&f&l{0}'
+    rutbe: '&7Rank: {0}'
+    mod-tum: '&6Has every permission &8(manager)'
+    izin-acik: '&a✔ &7{0}'
+    izin-kapali: '&c✘ &7{0}'
+    ozel-isaret: ' &e*'
+    acik-sayi: '&7Enabled: &f{0}&7/&f{1}'
+    ozel-aciklama: '&e* &8= custom setting'
+    tikla-duzenle: '&e▶ Click: edit rank and permissions'
+    yonetemezsin: '&8You cannot manage this member.'
+  rehber:
+    ad: '&6&lRank Guide'
+    mod:
+      - '&8• All permissions + member management'
+      - '&8• Cannot touch the owner or other Mods'
+      - '&8• Cannot give the Mod rank'
+    sadece-giris: '&8• Can only enter the plot'
+    madde: '&8• {0}'
+    not: '&8Changing rank resets custom permission settings.'
+  uyeizin:
+    baslik: '&8Member &8» &0{0}'
+    dusur:
+      ad: '&c&l▼ Demote'
+      pasif: '&7▼ Demote'
+    yukselt:
+      ad: '&a&l▲ Promote'
+      pasif: '&7▲ Promote'
+    en-dusuk: '&8Already the lowest rank.'
+    en-yuksek: '&8Already the highest rank.'
+    rutbe-degisim:
+      - '&7Current: {0}'
+      - '&7New: {1}'
+      - ''
+      - '&8Custom permission settings are reset.'
+      - ''
+      - '&e▶ Click'
+    sadece-sahip-verir:
+      - '&8Only the plot owner can'
+      - '&8give the {0} &8rank.'
+    mod-bilgi:
+      - '&6Has every permission.'
+      - '&7Can manage and invite members.'
+    ipucu:
+      - '&8Glowing permissions are enabled.'
+      - '&8Click a permission to toggle it.'
+    at:
+      ad: '&c&lRemove From Plot'
+      lore:
+        - '&7Completely removes the member.'
+        - ''
+        - '&e▶ Click'
+      onay-ad: '&4&lARE YOU SURE?'
+      onay-lore:
+        - '&c{0} will be removed from the plot.'
+        - ''
+        - '&eClick again to confirm.'
+    mod-acik: '&6✔ Enabled by the Mod rank'
+    tumunu-ac-lore: '&7Enables every permission for this member.'
+    tumunu-kapat-lore:
+      - '&7Disables every permission for this member.'
+      - '&8(The member can only enter the plot.)'
+    sifirla:
+      ad: '&e&lReset To Defaults'
+      lore:
+        - '&7Removes custom settings and applies'
+        - '&7the defaults of the {0} &7rank.'
+  izin:
+    ad-acik: '&a{0}'
+    ad-kapali: '&c{0}'
+    ad-mod: '&6{0}'
+    durum-acik: '&7Status: &a✔ ENABLED {0}'
+    durum-kapali: '&7Status: &c✘ DISABLED {0}'
+    kaynak:
+      ozel: '&e(custom)'
+      rutbe: '&8(rank default)'
+      ziyaretci: '&8(visitor permission)'
+    tikla-ac: '&e▶ Click: enable'
+    tikla-kapat: '&e▶ Click: disable'
+  ziyaretci:
+    baslik: '&8Plot &7#{0} &8» &0Visitors'
+    bilgi:
+      - '&7Applies to EVERYONE who is not a'
+      - '&7member. Default: full protection.'
+      - ''
+      - '&7Enabled: &f{0}&7/&f{1}'
+      - ''
+      - '&c⚠ Everyone on the server can use'
+      - '&cthe permissions you enable!'
+    yapabilir: '&7Visitors: &a✔ ALLOWED'
+    yapamaz: '&7Visitors: &c✘ DENIED'
+    tumunu-ac-lore:
+      - '&7Visitors will be able to do'
+      - '&7everything in the plot.'
+    tumunu-kapat-lore:
+      - '&7Full protection: visitors can'
+      - '&7only enter the plot.'
+  liste:
+    baslik: '&8Plots &8({0}/{1})'
+    bos: '&7No plots to show.'
+    silinmis: 'This plot no longer exists.'
+    arsa:
+      ad-sahipli: '&e&l#{0} &8» &f{1}'
+      ad-sahipsiz: '&e&l#{0} &8» &aUnclaimed'
+      lore:
+        - '&7World: &f{0}'
+        - '&7Size: &f{1}'
+        - '&7Location: &f{2}'
+        - '&7Members: &f{3}'
+        - '&7Visitor permissions: &f{4}'
+      kira: '&7Rent left: &f{0}'
+      tikla: '&e▶ Click: full details'
+    filtre:
+      ad: '&b&lFilter'
+      tumu: 'All'
+      sahipli: 'Claimed'
+      sahipsiz: 'Unclaimed'
+      secili: '&a▶ {0}'
+      secili-degil: '&7  {0}'
+      tikla: '&e▶ Click: change filter'
+    ozet:
+      ad: '&6&lSummary'
+      lore:
+        - '&7Total plots: &f{0}'
+        - '&7Claimed: &f{1}'
+        - '&7Unclaimed: &f{2}'
+        - '&7Rented: &f{3}'
+        - '&7Total members: &f{4}'
+        - ''
+        - '&7In this filter: &f{5}'
+  detay:
+    baslik: '&8Plot &7#{0} &8» &0Details'
+    sahipsiz: '&a&lUnclaimed Plot'
+    isinlan:
+      ad: '&d&lTeleport'
+      lore: '&7Teleports you to the center of the plot.'
+    isinlandi: 'Teleported to plot &f#{0}&a.'
+    dunya-yok: 'World ''&f{0}&c'' is not loaded.'
+    uye-yok: '&7This plot has no members.'
+    yonet:
+      ad: '&b&lManage Plot'
+      lore: '&7Open the management panel as the owner.'

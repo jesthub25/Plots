@@ -7,6 +7,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jestron.gelismisArsa.dil.DilYoneticisi;
+import org.jestron.gelismisArsa.dil.L;
 import org.jestron.gelismisArsa.entegrasyon.Ekonomi;
 import org.jestron.gelismisArsa.entegrasyon.WorldEditKopru;
 import org.jestron.gelismisArsa.gui.MenuListener;
@@ -29,6 +31,7 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
     private final Ayarlar ayarlar = new Ayarlar();
     private final ArsaManager arsalar = new ArsaManager();
     private final Yetki yetki = new Yetki();
+    private final DilYoneticisi diller = new DilYoneticisi();
     private VeriDeposu depo;
     private UyeServisi uyeServisi;
     private KiraServisi kira;
@@ -40,9 +43,9 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
     public void onEnable() {
         saveDefaultConfig();
 
-        depo = new VeriDeposu(this, arsalar);
+        depo = new VeriDeposu(this, arsalar, diller);
         depo.yukle();               // eski sürüm verisi varsa burada taşınır (config.yml yenilenir)
-        reloadConfig();
+        diller.degisinceCalistir(depo::kaydetPlanla);
         ayarlariYenile();
 
         PluginManager pm = getServer().getPluginManager();
@@ -70,13 +73,15 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
         pm.registerEvents(kira, this);
         pm.registerEvents(this, this);
 
-        PluginCommand komut = getCommand("arsa");
-        if (komut != null) {
-            ArsaKomut k = new ArsaKomut(this);
-            komut.setExecutor(k);
-            komut.setTabCompleter(k);
-        } else {
-            getLogger().severe("plugin.yml içinde 'arsa' komutu bulunamadı!");
+        ArsaKomut k = new ArsaKomut(this);
+        for (String ad : new String[]{"arsa", "plot"}) {
+            PluginCommand komut = getCommand(ad);
+            if (komut != null) {
+                komut.setExecutor(k);
+                komut.setTabCompleter(k);
+            } else {
+                getLogger().severe("plugin.yml icinde '" + ad + "' komutu bulunamadi!");
+            }
         }
 
         kira.baslat();
@@ -93,7 +98,9 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
     public void ayarlariYenile() {
         reloadConfig();
         ayarlar.yukle(getConfig(), getLogger());
-        Mesaj.ayarla(ayarlar.onEk, ayarlar.mesajBeklemeMs);
+        L.yukle(this);
+        diller.varsayilanAyarla(ayarlar.varsayilanDil);
+        Mesaj.kur(diller, ayarlar.mesajBeklemeMs);
     }
 
     private static boolean eklentiVar(PluginManager pm, String ad) {
@@ -112,6 +119,7 @@ public final class GelismisArsa extends JavaPlugin implements Listener {
     public Ayarlar ayarlar() { return ayarlar; }
     public ArsaManager arsalar() { return arsalar; }
     public Yetki yetki() { return yetki; }
+    public DilYoneticisi diller() { return diller; }
     public VeriDeposu depo() { return depo; }
     public UyeServisi uyeServisi() { return uyeServisi; }
     public KiraServisi kira() { return kira; }

@@ -13,6 +13,8 @@ import org.jestron.gelismisArsa.model.Rutbe;
 import org.jestron.gelismisArsa.util.Mesaj;
 import org.jestron.gelismisArsa.util.OyuncuBul;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,7 +22,7 @@ import java.util.UUID;
  *
  *  0 Geri · 2 Rütbe düşür · 4 Üye bilgisi · 6 Rütbe yükselt · 8 Arsadan at (onaylı)
  *  9-19  izinler (11 adet, parlayan = açık)
- *  24 Tümünü aç · 25 Tümünü kapat · 26 Rütbe varsayılanına sıfırla
+ *  24 Tümünü aç · 25 Tümünü kapat · 26 Rütbe varsayılanına döndür
  */
 public final class UyeIzinMenu extends Menu {
 
@@ -31,7 +33,7 @@ public final class UyeIzinMenu extends Menu {
     private boolean atmaOnayi;
 
     public UyeIzinMenu(GelismisArsa plugin, Player oyuncu, Arsa arsa, UUID hedef) {
-        super(plugin, oyuncu, arsa, 3, "&8Üye &8» &0" + OyuncuBul.isim(hedef));
+        super(plugin, oyuncu, arsa, 3, "menu.uyeizin.baslik", OyuncuBul.isim(hedef));
         this.hedef = hedef;
         this.hedefOyuncu = Bukkit.getOfflinePlayer(hedef);
     }
@@ -47,8 +49,9 @@ public final class UyeIzinMenu extends Menu {
         if (uye == null) return;
         Rutbe rutbe = uye.rutbe();
         boolean mod = rutbe == Rutbe.MOD;
+        String isim = OyuncuBul.isim(hedef);
 
-        koy(0, Ikon.of(Material.ARROW).ad("&e« Geri").satir("&7Üye listesine dön.").yap(), t -> {
+        koy(0, geriIkonu("menu.geri.uyeler"), tik -> {
             Mesaj.sesSayfa(oyuncu);
             new UyelerMenu(plugin, oyuncu, arsa, 0).ac();
         });
@@ -57,56 +60,56 @@ public final class UyeIzinMenu extends Menu {
         Rutbe onceki = rutbe.onceki();
         if (onceki != rutbe) {
             koy(2, Ikon.of(Material.RED_DYE)
-                    .ad("&c&l▼ Rütbe Düşür")
-                    .satir("&7Şu an: " + rutbe.gorunenAd(), "&7Yeni: " + onceki.gorunenAd())
-                    .bosluk().satir("&8Özel izin ayarları sıfırlanır.").bosluk().satir("&e▶ Tıkla").yap(), t -> {
+                    .ad(t("menu.uyeizin.dusur.ad"))
+                    .satirlar(l("menu.uyeizin.rutbe-degisim", rutbe.ad(dil), onceki.ad(dil)))
+                    .yap(), tik -> {
                 if (plugin.uyeServisi().rutbeKaydir(oyuncu, arsa, hedef, false)) yenidenCiz();
             });
         } else {
-            koy(2, Ikon.of(Material.GRAY_DYE).ad("&7▼ Rütbe Düşür").satir("&8Zaten en düşük rütbe.").yap());
+            koy(2, Ikon.of(Material.GRAY_DYE).ad(t("menu.uyeizin.dusur.pasif"))
+                    .satir(t("menu.uyeizin.en-dusuk")).yap());
         }
 
         // Bilgi
-        Ikon bilgi = Ikon.kafa(hedefOyuncu).ad("&f&l" + OyuncuBul.isim(hedef))
-                .satir("&7Rütbe: " + rutbe.gorunenAd());
+        Ikon bilgi = Ikon.kafa(hedefOyuncu).ad(t("menu.uye.ad", isim))
+                .satir(t("menu.uye.rutbe", rutbe.ad(dil)));
         if (mod) {
-            bilgi.satir("&6Tüm izinlere sahiptir.", "&7Üyeleri yönetebilir ve davet edebilir.");
+            bilgi.satirlar(l("menu.uyeizin.mod-bilgi"));
         } else {
             int acik = 0;
             for (Izin i : Izin.values()) if (arsa.uyeIzni(uye, i)) acik++;
-            bilgi.satir("&7Açık izin: &f" + acik + "&7/&f" + Izin.values().length);
+            bilgi.satir(t("menu.uye.acik-sayi", acik, Izin.values().length));
         }
-        bilgi.bosluk().satir("&8Parlayan izinler açıktır.", "&8Bir izne tıklayarak aç/kapat.");
-        koy(4, bilgi.yap());
+        koy(4, bilgi.bosluk().satirlar(l("menu.uyeizin.ipucu")).yap());
 
         // Rütbe yükselt
         Rutbe sonraki = rutbe.sonraki();
         if (sonraki == rutbe) {
-            koy(6, Ikon.of(Material.GRAY_DYE).ad("&7▲ Rütbe Yükselt").satir("&8Zaten en yüksek rütbe.").yap());
+            koy(6, Ikon.of(Material.GRAY_DYE).ad(t("menu.uyeizin.yukselt.pasif"))
+                    .satir(t("menu.uyeizin.en-yuksek")).yap());
         } else if (!plugin.yetki().rutbeVerebilir(oyuncu, arsa, hedef, sonraki)) {
-            koy(6, Ikon.of(Material.GRAY_DYE).ad("&7▲ Rütbe Yükselt")
-                    .satir("&8" + sonraki.gorunenAd() + " &8rütbesini sadece", "&8arsa sahibi verebilir.").yap());
+            koy(6, Ikon.of(Material.GRAY_DYE).ad(t("menu.uyeizin.yukselt.pasif"))
+                    .satirlar(l("menu.uyeizin.sadece-sahip-verir", sonraki.ad(dil))).yap());
         } else {
             koy(6, Ikon.of(Material.LIME_DYE)
-                    .ad("&a&l▲ Rütbe Yükselt")
-                    .satir("&7Şu an: " + rutbe.gorunenAd(), "&7Yeni: " + sonraki.gorunenAd())
-                    .bosluk().satir("&8Özel izin ayarları sıfırlanır.").bosluk().satir("&e▶ Tıkla").yap(), t -> {
+                    .ad(t("menu.uyeizin.yukselt.ad"))
+                    .satirlar(l("menu.uyeizin.rutbe-degisim", rutbe.ad(dil), sonraki.ad(dil)))
+                    .yap(), tik -> {
                 if (plugin.uyeServisi().rutbeKaydir(oyuncu, arsa, hedef, true)) yenidenCiz();
             });
         }
 
         // Arsadan at (iki tık onaylı)
         if (atmaOnayi) {
-            koy(8, Ikon.of(Material.TNT).ad("&4&lEMİN MİSİN?")
-                    .satir("&c" + OyuncuBul.isim(hedef) + " arsadan atılacak.", "", "&eOnaylamak için tekrar tıkla.")
-                    .parla(true).yap(), t -> {
+            koy(8, Ikon.of(Material.TNT).ad(t("menu.uyeizin.at.onay-ad"))
+                    .satirlar(l("menu.uyeizin.at.onay-lore", isim)).parla(true).yap(), tik -> {
                 if (plugin.uyeServisi().at(oyuncu, arsa, hedef)) {
                     new UyelerMenu(plugin, oyuncu, arsa, 0).ac();
                 }
             });
         } else {
-            koy(8, Ikon.of(Material.BARRIER).ad("&c&lArsadan At")
-                    .satir("&7Üyeyi arsadan tamamen çıkarır.", "", "&e▶ Tıkla").yap(), t -> {
+            koy(8, Ikon.of(Material.BARRIER).ad(t("menu.uyeizin.at.ad"))
+                    .satirlar(l("menu.uyeizin.at.lore")).yap(), tik -> {
                 atmaOnayi = true;
                 Mesaj.sesTik(oyuncu);
                 yenidenCiz();
@@ -124,11 +127,11 @@ public final class UyeIzinMenu extends Menu {
         for (Izin izin : Izin.values()) {
             final Izin iz = izin;
             if (mod) {
-                koy(slot++, Ikon.of(iz.ikon()).ad("&6" + iz.ad())
-                        .satirlar(gri(iz)).bosluk().satir("&6✔ MOD rütbesi ile açık").parla(true).yap());
+                koy(slot++, Ikon.of(iz.ikon()).ad(t("menu.izin.ad-mod", iz.ad(dil)))
+                        .satirlar(gri(iz)).bosluk().satir(t("menu.uyeizin.mod-acik")).parla(true).yap());
                 continue;
             }
-            koy(slot++, izinIkonu(uye, iz), t -> {
+            koy(slot++, izinIkonu(uye, iz), tik -> {
                 boolean simdi = arsa.uyeIzni(uye, iz);
                 if (plugin.uyeServisi().izinAyarla(oyuncu, arsa, hedefOyuncu, iz, !simdi, true)) {
                     Mesaj.sesTik(oyuncu);
@@ -138,17 +141,17 @@ public final class UyeIzinMenu extends Menu {
         }
 
         if (!mod) {
-            koy(24, Ikon.of(Material.LIME_CONCRETE).ad("&a&lTümünü Aç")
-                    .satir("&7Tüm izinleri bu üye için açar.").yap(), t -> {
+            koy(24, Ikon.of(Material.LIME_CONCRETE).ad(t("menu.tumunu-ac"))
+                    .satir(t("menu.uyeizin.tumunu-ac-lore")).yap(), tik -> {
                 if (plugin.uyeServisi().tumIzinler(oyuncu, arsa, hedefOyuncu, Boolean.TRUE)) yenidenCiz();
             });
-            koy(25, Ikon.of(Material.RED_CONCRETE).ad("&c&lTümünü Kapat")
-                    .satir("&7Tüm izinleri bu üye için kapatır.", "&8(Üye sadece arsaya girebilir.)").yap(), t -> {
+            koy(25, Ikon.of(Material.RED_CONCRETE).ad(t("menu.tumunu-kapat"))
+                    .satirlar(l("menu.uyeizin.tumunu-kapat-lore")).yap(), tik -> {
                 if (plugin.uyeServisi().tumIzinler(oyuncu, arsa, hedefOyuncu, Boolean.FALSE)) yenidenCiz();
             });
-            koy(26, Ikon.of(Material.NETHER_STAR).ad("&e&lVarsayılana Döndür")
-                    .satir("&7Özel ayarları siler, " + rutbe.gorunenAd(), "&7rütbesinin varsayılanlarını uygular.")
-                    .parla(uye.ozelAyarVar()).yap(), t -> {
+            koy(26, Ikon.of(Material.NETHER_STAR).ad(t("menu.uyeizin.sifirla.ad"))
+                    .satirlar(l("menu.uyeizin.sifirla.lore", rutbe.ad(dil)))
+                    .parla(uye.ozelAyarVar()).yap(), tik -> {
                 if (plugin.uyeServisi().tumIzinler(oyuncu, arsa, hedefOyuncu, null)) yenidenCiz();
             });
         }
@@ -156,26 +159,24 @@ public final class UyeIzinMenu extends Menu {
 
     private ItemStack izinIkonu(ArsaUye uye, Izin iz) {
         boolean acik = arsa.uyeIzni(uye, iz);
-        Boolean ozel = uye.ozel(iz);
         String kaynak;
-        if (ozel != null) kaynak = "&e(özel ayar)";
-        else if (uye.rutbe().varsayilanIzin(iz)) kaynak = "&8(rütbe varsayılanı)";
-        else if (acik) kaynak = "&8(ziyaretçi izni)";
-        else kaynak = "&8(rütbe varsayılanı)";
+        if (uye.ozel(iz) != null) kaynak = t("menu.izin.kaynak.ozel");
+        else if (uye.rutbe().varsayilanIzin(iz) || !acik) kaynak = t("menu.izin.kaynak.rutbe");
+        else kaynak = t("menu.izin.kaynak.ziyaretci");
         return Ikon.of(iz.ikon())
-                .ad((acik ? "&a" : "&c") + iz.ad())
+                .ad(t(acik ? "menu.izin.ad-acik" : "menu.izin.ad-kapali", iz.ad(dil)))
                 .satirlar(gri(iz))
                 .bosluk()
-                .satir("&7Durum: " + (acik ? "&a✔ AÇIK" : "&c✘ KAPALI") + " " + kaynak)
+                .satir(t(acik ? "menu.izin.durum-acik" : "menu.izin.durum-kapali", kaynak))
                 .bosluk()
-                .satir("&e▶ Tıkla: " + (acik ? "kapat" : "aç"))
+                .satir(t(acik ? "menu.izin.tikla-kapat" : "menu.izin.tikla-ac"))
                 .parla(acik)
                 .yap();
     }
 
-    private static java.util.List<String> gri(Izin iz) {
-        java.util.List<String> l = new java.util.ArrayList<>();
-        for (String s : iz.aciklama()) l.add("&7" + s);
+    private List<String> gri(Izin iz) {
+        List<String> l = new ArrayList<>();
+        for (String s : iz.aciklama(dil)) l.add("&7" + s);
         return l;
     }
 }

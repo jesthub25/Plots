@@ -70,6 +70,27 @@ public final class ArsaManager {
         return l;
     }
 
+    /**
+     * Oyuncunun sahibi veya üyesi olduğu (adının geçtiği) ilk arsa; {@code haric} hariç tutulur.
+     * Tek arsa kuralı için kullanılır.
+     */
+    public Arsa iliskiliArsa(UUID oyuncu, Arsa haric) {
+        for (Arsa a : idIle.values()) {
+            if (a == haric) continue;
+            if (a.sahipMi(oyuncu) || a.uyeMi(oyuncu)) return a;
+        }
+        return null;
+    }
+
+    /** Oyuncunun sahibi veya üyesi olduğu tüm arsalar. */
+    public List<Arsa> iliskiliArsalar(UUID oyuncu) {
+        List<Arsa> l = new ArrayList<>(2);
+        for (Arsa a : idIle.values()) {
+            if (a.sahipMi(oyuncu) || a.uyeMi(oyuncu)) l.add(a);
+        }
+        return l;
+    }
+
     public Arsa cakisan(String dunya, int x1, int y1, int z1, int x2, int y2, int z2) {
         for (Arsa a : idIle.values()) {
             if (a.kesisir(dunya, x1, y1, z1, x2, y2, z2)) return a;

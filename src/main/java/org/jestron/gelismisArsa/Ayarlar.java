@@ -11,8 +11,9 @@ import java.util.logging.Logger;
 /** config.yml'den okunan ayarlar. /arsa yenile ile tekrar yüklenir. */
 public final class Ayarlar {
 
-    public String onEk;
+    public String varsayilanDil;
     public long mesajBeklemeMs;
+    public boolean tekArsaKurali;
 
     public boolean kiralamaAktif;
     public double haftalikUcret;
@@ -34,7 +35,8 @@ public final class Ayarlar {
     public final EnumSet<Izin> ziyaretciVarsayilan = EnumSet.noneOf(Izin.class);
 
     public void yukle(FileConfiguration c, Logger log) {
-        onEk = c.getString("on-ek", "&6&lArsa &8» &7");
+        varsayilanDil = c.getString("varsayilan-dil", "otomatik");
+        tekArsaKurali = c.getBoolean("tek-arsa-kurali", true);
         mesajBeklemeMs = Math.max(0L, c.getLong("mesaj-bekleme-ms", 1500L));
 
         kiralamaAktif = c.getBoolean("kiralama.aktif", true);
